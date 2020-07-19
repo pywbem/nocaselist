@@ -1,5 +1,5 @@
 nocaselist - A case-insensitive list for Python
-===============================
+===============================================
 
 .. image:: https://badge.fury.io/py/nocaselist.svg
     :target: https://pypi.python.org/pypi/nocaselist/
@@ -25,54 +25,55 @@ nocaselist - A case-insensitive list for Python
 Overview
 --------
 
-TBD
+Class ``NocaseList`` is a case-insensitive list that preserves
+the lexical case of its items.
+
+Example:
+
+.. code-block:: bash
+
+    $ python
+    >>> from nocaselist import NocaseList
+
+    >>> list1 = NocaseList(['Alpha', 'Beta'])
+
+    >>> print(list1)  # Any access is case-preserving
+    ['Alpha', 'Beta']
+
+    >>> 'ALPHA' in list1  # Any lookup or comparison is case-insensitive
+    True
+
 
 Installation
 ------------
 
-To install the latest released version of the nocaselist
-package into your active Python environment:
+To install the latest released version of the nocaselist package into your
+active Python environment:
 
 .. code-block:: bash
 
     $ pip install nocaselist
 
-This will also install any prerequisite Python packages.
+The nocaselist package has no prerequisite Python packages.
 
-For more details and alternative ways to install, see
-`Installation`_.
+For more details and alternative ways to install, see `Installation`_.
 
 .. _Installation: https://nocaselist.readthedocs.io/en/stable/intro.html#installation
 
 Documentation
 -------------
 
-* `Documentation for latest released version <https://nocaselist.readthedocs.io/en/stable/>`_
+* `Documentation <https://nocaselist.readthedocs.io/en/stable/>`_
 
 Change History
 --------------
 
-* `Change history for latest released version <https://nocaselist.readthedocs.io/en/stable/changes.html>`_
-
-Quick Start
------------
-
-The following simple example script lists the namespaces and the Interop
-namespace in a particular WBEM server:
-
-.. code-block:: python
-
-    #!/usr/bin/env python
-
-    import nocaselist
-
-    ... (tbd) ...
+* `Change history <https://nocaselist.readthedocs.io/en/stable/changes.html>`_
 
 Contributing
 ------------
 
-For information on how to contribute to the
-nocaselist project, see
+For information on how to contribute to the nocaselist project, see
 `Contributing <https://nocaselist.readthedocs.io/en/stable/development.html#contributing>`_.
 
 

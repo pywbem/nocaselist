@@ -4,24 +4,28 @@
 Introduction
 ============
 
-.. contents:: Chapter Contents
-   :depth: 2
-
 
 .. _`Functionality`:
 
 Functionality
--------------
+^^^^^^^^^^^^^
 
-TBD
+Class :class:`nocaselist.NocaseList` is a case-insensitive list that preserves
+the lexical case of its items.
 
+Example:
 
-.. _`Installation`:
+.. code-block:: bash
 
-Installation
-------------
+    $ python
+    >>> from nocaselist import NocaseList
+    >>> list1 = NocaseList(['Alpha', 'Beta'])
 
-TBD
+    >>> print(list1)  # Any access is case-preserving
+    ['Alpha', 'Beta']
+
+    >>> 'ALPHA' in list1  # Any lookup or comparison is case-insensitive
+    True
 
 
 .. _`Supported environments`:
@@ -107,9 +111,6 @@ it to):
 
     $ python -c "import nocaselist; print('ok')"
     ok
-
-In case of trouble with the installation, see the :ref:`Troubleshooting`
-section.
 
 
 .. _`Package version`:
@@ -200,9 +201,6 @@ the nocaselist project, by version type:
 
 Python namespaces
 -----------------
-
-TBD - describe the python namespaces to clarify what is for external use
-and what is internal.
 
 This documentation describes only the external APIs of the
 nocaselist project, and omits any internal symbols and

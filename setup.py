@@ -189,8 +189,7 @@ setuptools.setup(
     # Keep these Python versions in sync with nocaselist/__init__.py
     python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Environment :: Console',
+        'Development Status :: 5 - Production/Stable ',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',

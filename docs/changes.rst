@@ -5,8 +5,8 @@ Change log
 ==========
 
 
-nocaselist 0.1.0
--------------------------------------
+nocaselist 1.0.0-dev1
+---------------------
 
 Released: not yet
 
