@@ -165,6 +165,9 @@ function make_virtualenv()
     pip list --format=columns 2>/dev/null || pip list 2>/dev/null
   fi
 
+  # Pip 10.0.1 is instaled to have support for the features used in the requirements
+  # and constraints files (e.g. implementation_name)
+  run "pip install pip==10.0.1" "Reinstalling pip 10.0.1"
   run "pip install pip $PIP_OPTS" "Reinstalling pip with PACKAGE_LEVEL=$PACKAGE_LEVEL"
   run "pip install setuptools $PIP_OPTS" "Reinstalling setuptools with PACKAGE_LEVEL=$PACKAGE_LEVEL"
   run "pip install wheel $PIP_OPTS" "Reinstalling wheel with PACKAGE_LEVEL=$PACKAGE_LEVEL"
