@@ -9,10 +9,7 @@ nocaselist - A case-insensitive list for Python
     :target: https://travis-ci.org/github/pywbem/nocaselist/builds
     :alt: Travis test status (master)
 
-.. # Update the URL in the Appveyor image link below to match the
-.. # "SVG branchimage URL" from the "master branch status badge" section on
-.. # the Settings -> Badges page of the project on Appveyor.
-.. image:: https://ci.appveyor.com/api/projects/status/UPDATE-THIS/branch/master?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/3ydflnoj5em9s0mr/branch/master?svg=true
     :target: https://ci.appveyor.com/project/andy-maier/nocaselist/history
     :alt: Appveyor test status (master)
 
