@@ -3,10 +3,6 @@
 # Test the installation of the package.
 #
 # This script can be run from any directory.
-#
-# This script peforms its tests using the 'python' command from the active
-# Python environment, and it creates new virtualenvs for its tests. The
-# Python command name can be customized in the PYTHON_CMD environment variable.
 
 DEBUG="false"
 VERBOSE="true"
