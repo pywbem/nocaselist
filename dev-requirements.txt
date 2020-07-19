@@ -11,7 +11,6 @@
 
 # Direct dependencies:
 
-
 # Coverage reporting (no imports, invoked via coveralls script):
 # coverage 5.0 has removed support for py34
 coverage>=4.5.2,<5.0
@@ -82,59 +81,49 @@ readme-renderer>=23.0; python_version == '2.7'
 readme-renderer>=23.0,<25.0; python_version == '3.4'
 readme-renderer>=23.0; python_version >= '3.5'
 
-# Jupyter Notebook (no imports, invoked via jupyter script):
-# The jupyter package is not installed on Python 3.4 on Windows, because its
-# (indirectly) dependent pywin32 package is not available on Pypi for
-# Python 3.4.
-jupyter>=1.0.0; python_version != '3.4' or sys_platform != 'win32'
-ipython>=5.1.0,<6.0; python_version == '2.7'
-ipython>=6.0,<7.0; python_version == '3.4' and sys_platform != 'win32'
-ipython>=7.0,<7.10; python_version == '3.5'
-ipython>=7.10; python_version >= '3.6'
-ipykernel>=4.5.2; python_version != '3.4' or sys_platform != 'win32'
-ipython_genutils>=0.1.0; python_version != '3.4' or sys_platform != 'win32'
-ipywidgets>=5.2.2; python_version != '3.4' or sys_platform != 'win32'
-jupyter_console>=5.0.0,<6.0.0; python_version == '2.7'
-jupyter_console>=5.0.0,<6.0.0; python_version == '3.4' and sys_platform != 'win32'
-jupyter_console>=6.0.0; python_version >= '3.5'
-jupyter_client>=4.4.0; python_version != '3.4' or sys_platform != 'win32'
-jupyter_core>=4.2.1; python_version != '3.4' or sys_platform != 'win32'
-nbconvert>=5.0.0; python_version != '3.4' or sys_platform != 'win32'
-nbformat>=4.2.0; python_version != '3.4' or sys_platform != 'win32'
-notebook>=4.3.1; python_version != '3.4' or sys_platform != 'win32'
 
-# Pywin32 is used (at least?) by jupyter.
-# Pywin32 version 226 needs to be excluded, see issue #1946.
-# Pywin32 version 222 is inconsistent in its 32-bit/64-bit support on py37
-# Pywin32 version 225+ provides wheel files for py38, but does not advertise
-# py38 on Pypi. That causes pywin32==225 to fail but pywin32>=225 to work.
-# There is no version of pywin32 for py34.
-pywin32>=222,!=226; sys_platform == 'win32' and python_version == '2.7'
-pywin32>=222,!=226; sys_platform == 'win32' and python_version >= '3.5' and python_version <= '3.6'
-pywin32>=223,!=226; sys_platform == 'win32' and python_version == '3.7'
-# TODO: Re-enable once pywin32 fixes its Python version advertising on Pypi
-#       (see issue #1975).
-# pywin32>=225,!=226; sys_platform == 'win32' and python_version >= '3.8'
+# Indirect dependencies with special constraints:
 
-# The tornado package is used by ipykernel which is used by jupyter.
-# Tornado 5.0.0 and 5.0.1 rejects installation if the Python ssl module
-# does not have certain symbols required by Tornado. This issue exists for
-# example with Python 2.7.6 on Ubuntu 14.04, but not with Python 2.7.5 on
-# RHEL 7.4. This can be checked with:
-#   python -c "import ssl; ssl.SSLContext; ssl.create_default_context; ssl.match_hostname"
-# Other projects have the same issue:
-#   https://github.com/floydhub/dl-docker/issues/84
-# The following is a circumvention of this issue that nails the tornado
-# version to below 5.0 on Python 2.
-# TODO: Follow up on resolution of this issue.
-tornado<5.0; python_version <= '2.7'
+# pytz (used by TBD)
+pytz>=2016.10
 
-# Table output formatter used by the manual performance tests to display
-# timing results
-tabulate >= 0.8.3
-
-# Performance profiling tools
-pyinstrument >=3.0.1
+# colorama (used by TBD)
+# colorama 0.4.0 removed support for Python 3.4
+colorama>=0.3.9,<0.4.0; python_version <= '3.4'
+colorama>=0.4.0; python_version >= '3.5'
 
 
-# Indirect dependencies are not specified in this file unless constraints are needed.
+# Additional indirect dependencies are not specified in this file:
+
+# alabaster
+# babel
+# bleach
+# certifi
+# chardet
+# docutils
+# Click
+# gitdb
+# idna
+# imagesize
+# isort
+# Jinja2
+# keyring
+# lazy-object-proxy
+# MarkupSafe
+# pkginfo
+# requests
+# requests-toolbelt
+# rfc3986
+# smmap
+# snowballstemmer
+# sphinxcontrib-applehelp
+# sphinxcontrib-devhelp
+# sphinxcontrib-htmlhelp
+# sphinxcontrib-jsmath
+# sphinxcontrib-qthelp
+# sphinxcontrib-serializinghtml
+# toml
+# tqdm
+# urllib3
+# webencodings
+# wrapt
