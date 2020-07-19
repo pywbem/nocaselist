@@ -115,7 +115,7 @@ install:
       git fetch origin master &
       git branch master FETCH_HEAD &
       git rebase master )
-  - git log HEAD~~~~..HEAD --oneline --decorate
+  - cmd /c "git log HEAD~~~~..HEAD --oneline --decorate & echo ok"
   - if %APPVEYOR_REPO_BRANCH%.==manual-ci-run. set _MANUAL_CI_RUN=true
   - if %APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH%.==manual-ci-run. set _MANUAL_CI_RUN=true
   - echo _MANUAL_CI_RUN=%_MANUAL_CI_RUN%

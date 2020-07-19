@@ -178,7 +178,7 @@ before_install:
       git branch master FETCH_HEAD;
       git rebase master;
     fi
-  - git log HEAD~~~~..HEAD --oneline --decorate
+  - git log HEAD~~~~..HEAD --oneline --decorate || true
   - if [[ "$TRAVIS_BRANCH" == "manual-ci-run" || "$TRAVIS_PULL_REQUEST_BRANCH" == "manual-ci-run" ]]; then
       export _MANUAL_CI_RUN=true;
     fi
