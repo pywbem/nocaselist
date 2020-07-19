@@ -9,8 +9,6 @@ git:
 notifications:
   email: false
 
-sudo: required
-
 # Disabling the distro, so we get the latest.
 # Note that for Python 3.7 and higher, at least Ubuntu xenial is required,
 # which is the default on Travis since 6/2019.
@@ -24,7 +22,7 @@ sudo: required
 # not work. Also, on OS-X, it needs to be invoked with language=generic
 # and an empty 'python' variable in order to prevent that Travis attempts
 # to install Python.
-matrix:
+jobs:
   include:
 
     - os: linux
