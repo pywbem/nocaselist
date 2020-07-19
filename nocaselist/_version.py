@@ -3,7 +3,7 @@ Version of the nocaselist package.
 """
 
 #: The full version of this package including any development levels, as a
-#: :term:`string`.
+#: string.
 #:
 #: Possible formats for this version string are:
 #:
