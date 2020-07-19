@@ -7,9 +7,14 @@
 # the minimum versions specified in minimum-constraints.txt.
 
 
-# Direct dependencies (except pip, setuptools, wheel):
+# The base dependencies are not specified in this file:
+# pip
+# setuptools
+# wheel
 
-# ... add them here
+
+# Direct dependencies (except pip, setuptools, wheel):
+# (None)
 
 
 # Indirect dependencies are not specified in this file.
