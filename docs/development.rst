@@ -128,6 +128,7 @@ There are multiple types of tests:
        $ ./setup.py test
 
    Options for pytest can be passed using the ``--pytest-options`` option.
+
 To run the unit tests in all supported Python environments, the
 Tox tool can be used. It creates the necessary virtual Python environments and
 executes `make test` (i.e. the unit tests) in each of them.
