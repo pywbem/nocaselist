@@ -152,6 +152,14 @@ install:
   - 'if "%UNIX_PATH%"=="C:\cygwin\bin" ( C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -P %CYGWIN_PYTHON_DEVEL% )'
   - 'if "%UNIX_PATH%"=="C:\cygwin64\bin" ( C:\cygwin64\setup-x86_64.exe -qnNdO -R C:/cygwin64 -P %CYGWIN_PYTHON_DEVEL% )'
 
+  # Install packages for installing lxml on CygWin
+  - 'if "%UNIX_PATH%"=="C:\cygwin\bin" ( C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -P libxml2-devel -P libxslt-devel )'
+  - 'if "%UNIX_PATH%"=="C:\cygwin64\bin" ( C:\cygwin64\setup-x86_64.exe -qnNdO -R C:/cygwin64 -P libxml2-devel -P libxslt-devel )'
+
+  # Install packages for installing pyzmq on CygWin
+  - 'if "%UNIX_PATH%"=="C:\cygwin\bin" ( C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -P libzmq-devel )'
+  - 'if "%UNIX_PATH%"=="C:\cygwin64\bin" ( C:\cygwin64\setup-x86_64.exe -qnNdO -R C:/cygwin64 -P libzmq-devel )'
+
   # Verify that Python command is available, and fail if not
   - if "%UNIX_PATH%"=="none" ( where %PYTHON_CMD% )
   - if not "%UNIX_PATH%"=="none" ( bash --noprofile --norc -c "which %PYTHON_CMD%" )
