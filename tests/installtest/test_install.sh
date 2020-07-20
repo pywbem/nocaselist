@@ -11,23 +11,25 @@ PACKAGE_NAME=nocaselist
 
 function abspath()
 {
-    # generate absolute path from relative path
-    # $1     : relative filename
-    # return : absolute path
-    if [ -d "$1" ]; then
-        # dir
-        (cd "$1"; pwd)
-    elif [ -f "$1" ]; then
-        # file
-        if [[ $1 == */* ]]; then
-            echo "$(cd "${1%/*}"; pwd)/${1##*/}"
-        else
-            echo "$(pwd)/$1"
-        fi
-    else
-        error "Path does not exist: $1"
-        exit 1
-    fi
+    # return absolute path name, normalizing ".."
+    # $1     : input path name
+    # return : normalized absolute path name
+    python -c "import os; print(os.path.abspath('$1'))"
+
+    # if [ -d "$1" ]; then
+    #     # dir
+    #     (cd "$1"; pwd)
+    # elif [ -f "$1" ]; then
+    #     # file
+    #     if [[ $1 == */* ]]; then
+    #         echo "$(cd "${1%/*}"; pwd)/${1##*/}"
+    #     else
+    #         echo "$(pwd)/$1"
+    #     fi
+    # else
+    #     error "Path does not exist: $1"
+    #     exit 1
+    # fi
 }
 
 MYNAME=$(basename "$0")
@@ -35,7 +37,7 @@ MYDIR=$(dirname "$0")    # Directory of this script, as seen by caller
 
 # Repo root dir, as seen by caller
 # Using MYDIR makes the script run with any caller's CWD.
-ROOT_DIR="$MYDIR/../.."
+ROOT_DIR=$(abspath "$MYDIR/../..")
 
 # Detect and default PACKAGE_LEVEL (minimum/latest)
 if [[ -z $PACKAGE_LEVEL ]]; then
@@ -153,6 +155,10 @@ function make_virtualenv()
     virtualenv_debug_opts=""
   fi
   run "virtualenv -p $python_cmd_path $virtualenv_debug_opts $envdir" "Creating virtualenv: $envdir"
+  if [[ "$DEBUG" == "true" ]]; then
+    echo "Debug: Listing files in $envdir/bin"
+    ls -al $envdir/bin
+  fi
   run "source $envdir/bin/activate" "Activating virtualenv: $envdir"
 
   verbose "Virtualenv before reinstalling base packages:"
