@@ -109,14 +109,13 @@ jobs:
 #      env:
 #        - PACKAGE_LEVEL=latest
 
-# TODO: pypy3 disabled due to install error with typed-ast (from pylint)
 #    - os: linux
 #      language: python
 #      python: "pypy3"  # currently Python 3.6.1, PyPy 7.1.1-beta0
 #      env:
 #        - PACKAGE_LEVEL=minimum
 
-# TODO: pypy3 disabled due to install error with typed-ast (from pylint)
+# TODO: pypy3 with latest package levels disabled due to virtualenv creation issue
 #    - os: linux
 #      language: python
 #      python: "pypy3"  # currently Python 3.6.1, PyPy 7.1.1-beta0
