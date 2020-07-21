@@ -5,23 +5,10 @@ Change log
 ==========
 
 
-nocaselist 1.0.0-dev1
----------------------
+nocaselist 1.0.0
+----------------
 
-Released: not yet
+Released: 2020-07-21
 
-**Incompatible changes:**
+Initial release.
 
-**Deprecations:**
-
-**Bug fixes:**
-
-**Enhancements:**
-
-**Cleanup:**
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
