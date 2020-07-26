@@ -29,6 +29,15 @@ Released: not yet
 
 * Docs: Switched Sphinx theme to sphinx_rtd_theme (See issue #19)
 
+* Docs: Documented exceptions that can be raised, in all methods.
+
+* Docs: Switched links to items in the Python documentation to go to Python 3
+  instead of Python 2.
+
+* Docs: Clarified that NocaseList supports the functionality of the built-in
+  list class as of Python 3.8, including all methods that have been added since
+  Python 2.7, on all Python versions.
+
 **Cleanup:**
 
 **Known issues:**

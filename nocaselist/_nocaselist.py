@@ -1,5 +1,5 @@
 """
-The only class exposed by this package is :class:`nocaselist.NocaseList`.
+This module provides class NocaseList.
 """
 
 from __future__ import print_function, absolute_import
@@ -20,7 +20,7 @@ def _lc_list(lst):
 class NocaseList(list):
     # pylint: disable=line-too-long
     """
-    A case-insensitive, case-preserving, list.
+    A case-insensitive and case-preserving list.
 
     The list is case-insensitive: Whenever items of the list are looked up by
     value or item values are compared, that is done case-insensitively. The
@@ -40,14 +40,18 @@ class NocaseList(list):
     The implementation maintains a second list with the lower-cased items of
     the inherited list, and ensures that both lists are in sync.
 
-    The ``NocaseList`` class supports all behaviors of the built-in
-    :class:`py:list` class, so its documentation applies completely:
-
-    * `built-in list class documentation <https://docs.python.org/3/library/stdtypes.html#list>`_
+    The :class:`NocaseList` class supports the functionality of the built-in
+    `list class of Python 3.8`_, so its documentation applies completely.
+    Methods that have been added to the built-in :class:`py3:list`
+    class between Python 2.7 and Python 3.8 (i.e. :meth:`~NocaseList.clear` and
+    :meth:`~NocaseList.copy`) are supported by the :class:`NocaseList` class on
+    all Python versions.
 
     The following documentation is provided only for explicit documentation of
     the case-insensitive behavior, and to indicate which methods have been
     implemented for maintaining the second lower-cased list.
+
+    .. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
     """  # noqa E401
     # pylint: enable=line-too-long
 
@@ -83,6 +87,9 @@ class NocaseList(list):
         Update the value of the item at an existing index in the list.
 
         Invoked using ``ncl[index] = value``.
+
+        Raises:
+          AttributeError: The value does not have a ``lower()`` method.
         """
         super(NocaseList, self).__setitem__(index, value)
         self._lc_list[index] = value.lower()
@@ -102,6 +109,9 @@ class NocaseList(list):
         item with the value, by looking it up case-insensitively.
 
         Invoked using ``value in ncl``.
+
+        Raises:
+          AttributeError: The value does not have a ``lower()`` method.
         """
         return value.lower() in self._lc_list
 
@@ -182,6 +192,10 @@ class NocaseList(list):
         iterable. In all cases, the comparison takes place case-insensitively.
 
         Invoked using e.g. ``ncl == other``.
+
+        Raises:
+          AttributeError: A value in the other list does not have a ``lower()``
+            method.
         """
         if isinstance(other, NocaseList):
             other = other._lc_list  # pylint: disable=protected-access
@@ -198,6 +212,10 @@ class NocaseList(list):
         iterable. In all cases, the comparison takes place case-insensitively.
 
         Invoked using e.g. ``ncl != other``.
+
+        Raises:
+          AttributeError: A value in the other list does not have a ``lower()``
+            method.
         """
         if isinstance(other, NocaseList):
             other = other._lc_list  # pylint: disable=protected-access
@@ -214,6 +232,10 @@ class NocaseList(list):
         iterable. In all cases, the comparison takes place case-insensitively.
 
         Invoked using e.g. ``ncl > other``.
+
+        Raises:
+          AttributeError: A value in the other list does not have a ``lower()``
+            method.
         """
         if isinstance(other, NocaseList):
             other = other._lc_list  # pylint: disable=protected-access
@@ -230,6 +252,10 @@ class NocaseList(list):
         iterable. In all cases, the comparison takes place case-insensitively.
 
         Invoked using e.g. ``ncl < other``.
+
+        Raises:
+          AttributeError: A value in the other list does not have a ``lower()``
+            method.
         """
         if isinstance(other, NocaseList):
             other = other._lc_list  # pylint: disable=protected-access
@@ -247,6 +273,10 @@ class NocaseList(list):
         iterable. In all cases, the comparison takes place case-insensitively.
 
         Invoked using e.g. ``ncl >= other``.
+
+        Raises:
+          AttributeError: A value in the other list does not have a ``lower()``
+            method.
         """
         if isinstance(other, NocaseList):
             other = other._lc_list  # pylint: disable=protected-access
@@ -264,6 +294,10 @@ class NocaseList(list):
         iterable. In all cases, the comparison takes place case-insensitively.
 
         Invoked using e.g. ``ncl <= other``.
+
+        Raises:
+          AttributeError: A value in the other list does not have a ``lower()``
+            method.
         """
         if isinstance(other, NocaseList):
             other = other._lc_list  # pylint: disable=protected-access
@@ -275,6 +309,9 @@ class NocaseList(list):
         """
         Return the number of times the specified value occurs in the list,
         comparing the value and the list items case-insensitively.
+
+        Raises:
+          AttributeError: The value does not have a ``lower()`` method.
         """
         return self._lc_list.count(value.lower())
 
@@ -306,6 +343,7 @@ class NocaseList(list):
         of the first item after the search range.
 
         Raises:
+          AttributeError: The value does not have a ``lower()`` method.
           ValueError: No such item is found.
         """
         return self._lc_list.index(value.lower(), start, stop)
@@ -314,6 +352,9 @@ class NocaseList(list):
         """
         Append the specified value as a new item to the end of the list
         (and return None).
+
+        Raises:
+          AttributeError: The value does not have a ``lower()`` method.
         """
         super(NocaseList, self).append(value)
         self._lc_list.append(value.lower())
@@ -322,6 +363,10 @@ class NocaseList(list):
         """
         Extend the list by the items in the specified iterable
         (and return None).
+
+        Raises:
+          AttributeError: A value in the iterable does not have a ``lower()``
+            method.
         """
         super(NocaseList, self).extend(iterable)
         for value in iterable:
@@ -331,6 +376,9 @@ class NocaseList(list):
         """
         Insert a new item with specified value before the item at the specified
         index (and return None).
+
+        Raises:
+          AttributeError: The value does not have a ``lower()`` method.
         """
         super(NocaseList, self).insert(index, value)
         self._lc_list.insert(index, value.lower())
@@ -348,6 +396,9 @@ class NocaseList(list):
         Remove the first item from the list whose value is equal to the
         specified value (and return None), comparing the value and the list
         items case-insensitively.
+
+        Raises:
+          AttributeError: The value does not have a ``lower()`` method.
         """
         self._lc_list.remove(value.lower())
         super(NocaseList, self).remove(value)
@@ -376,6 +427,9 @@ class NocaseList(list):
 
         def lower_key(value):
             """Key function used for sorting"""
+            # The function cannot raise AttributeError due to missing lower()
+            # method, because the list items have been verified for that when
+            # adding them to the list.
             if key:
                 return key(value.lower())
             return value.lower()
