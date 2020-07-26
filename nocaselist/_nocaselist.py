@@ -51,6 +51,23 @@ class NocaseList(list):
     """  # noqa E401
     # pylint: enable=line-too-long
 
+    # Methods not implemented:
+    #
+    # * __getattribute__(self, name): The method inherited from object is used;
+    #   no reason to have a different implementation.
+    #
+    # * __sizeof__(self): The method inherited from list is used; no reason
+    #   to have a different implementation.
+    #
+    # __repr__(): The method inherited from list is used; no reason
+    #   to have a different implementation.
+    #
+    # __getitem__(): The method inherited from list is used; no reason
+    #   to have a different implementation.
+    #
+    # __iter__(): The method inherited from list is used; no reason
+    #   to have a different implementation.
+
     def __init__(self, iterable=()):
         """
         Initialize the list with the items in the specified iterable.
@@ -60,12 +77,6 @@ class NocaseList(list):
         # A list with the same items as the original list, except they are in
         # lower case.
         self._lc_list = _lc_list(self)
-
-    # __repr__(): The inherited method is used.
-
-    # __getattribute__(): The inherited method is used.
-
-    # __getitem__(): The inherited method is used.
 
     def __setitem__(self, index, value):
         """
@@ -85,8 +96,6 @@ class NocaseList(list):
         super(NocaseList, self).__delitem__(index)
         del self._lc_list[index]
 
-    # __iter__(): The inherited method is used.
-
     def __contains__(self, value):
         """
         Return a boolean indicating whether the list contains at least one
@@ -95,8 +104,6 @@ class NocaseList(list):
         Invoked using ``value in ncl``.
         """
         return value.lower() in self._lc_list
-
-    # __sizeof__(): The inherited method is used.
 
     def __add__(self, value):
         """
