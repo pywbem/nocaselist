@@ -18,6 +18,9 @@ Released: not yet
 
 **Enhancements:**
 
+* Test: Coveralls now runs on all python versions, merging the result.
+  (See issue #17)
+
 **Cleanup:**
 
 **Known issues:**
@@ -33,4 +36,3 @@ nocaselist 1.0.0
 Released: 2020-07-21
 
 Initial release.
-
