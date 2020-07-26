@@ -25,6 +25,8 @@ Released: not yet
   make target 'testlist', and running that test on the Travis and Appveyor CIs.
   (See issue #16)
 
+* Removed enforcement of Python version at run time. (See issue #18)
+
 **Cleanup:**
 
 **Known issues:**
