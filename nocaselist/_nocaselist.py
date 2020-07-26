@@ -4,7 +4,15 @@ This module provides class NocaseList.
 
 from __future__ import print_function, absolute_import
 
+import sys
+
 __all__ = ['NocaseList']
+
+if sys.version_info[0] == 2:
+    # pylint: disable=undefined-variable
+    _INTEGER_TYPES = (long, int)  # noqa: F821
+else:
+    _INTEGER_TYPES = (int,)
 
 
 def _lc_list(lst):
@@ -154,12 +162,20 @@ class NocaseList(list):
 
     def __mul__(self, number):
         """
-        Return a shallow copy of the list, that has the items from the original
-        list as many times as specified by number (including 0). The original
-        list is not changed.
+        Return a new :class:`NocaseList` object that contains the items from
+        the left hand operand (``self``) as many times as specified by the right
+        hand operand (``number``).
+
+        A number <= 0 causes the returned list to be empty.
+
+        The left hand operand (``self``) is not changed.
 
         Invoked using ``ncl * number``.
         """
+        if not isinstance(number, _INTEGER_TYPES):
+            raise TypeError(
+                "Cannot multiply NocaseList by non-integer of type {t}".
+                format(t=type(number)))
         lst = NocaseList()
         for _ in range(0, number):
             lst.extend(self)
@@ -167,9 +183,13 @@ class NocaseList(list):
 
     def __rmul__(self, number):
         """
-        Return a shallow copy of the list, that has the items from the original
-        list as many times as specified by number (including 0). The original
-        list is not changed.
+        Return a new :class:`NocaseList` object that contains the items from
+        the right hand operand (``self``) as many times as specified by the left
+        hand operand (``number``).
+
+        A number <= 0 causes the returned list to be empty.
+
+        The right hand operand (``self``) is not changed.
 
         Invoked using ``number * ncl``.
         """
@@ -178,15 +198,28 @@ class NocaseList(list):
 
     def __imul__(self, number):
         """
-        Replace the original list by a list that has the items from the original
-        list as many times as specified by number (including 0).
+        Change the left hand operand (``self``) so that it contains the items
+        from the original left hand operand (``self``) as many times as
+        specified by the right hand operand (``number``).
+
+        A number <= 0 will empty the left hand operand.
 
         Invoked using ``ncl *= number``.
         """
         # Note: It is unusual that the method has to return self, but it was
         # verified that this is necessary.
-        lst = self * number  # Delegates to __mul__()
-        return lst
+        if not isinstance(number, _INTEGER_TYPES):
+            raise TypeError(
+                "Cannot multiply NocaseList by non-integer of type {t}".
+                format(t=type(number)))
+        if number <= 0:
+            del self[:]
+            del self._lc_list[:]
+        else:
+            self_items = list(self)
+            for _ in range(0, number - 1):
+                self.extend(self_items)
+        return self
 
     def __reversed__(self):
         """

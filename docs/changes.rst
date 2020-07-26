@@ -21,6 +21,10 @@ Released: not yet
   (incorrectly) as a single item. For '+', the right hand operand now must
   be a list, consistent with the built-in list class. (See issue #25)
 
+* Fixed the incorrect behavior of the `*` and `*=` operators to now validate
+  that the number is an integer and raise TypeError otherwise, consistent with
+  the built-in list class. (See issue #27)
+
 **Enhancements:**
 
 * Test: Coveralls now runs on all python versions, merging the result.
@@ -46,9 +50,14 @@ Released: not yet
   list class as of Python 3.8, including all methods that have been added since
   Python 2.7, on all Python versions.
 
+<<<<<<< HEAD
 * Improved the performance of initializing a NocaseList object by copying
   the internal lower-cased list when possible, instead of rebuilding it from
   the original list.
+=======
+* The `*=` operator now modifies the left hand operand list in place, instead of
+  returning a new list. Note that both is correct behavior. (Part of issue #27)
+>>>>>>> 76dc790... Fixed the incorrect behavior of the `*` and `*=` operators
 
 **Cleanup:**
 

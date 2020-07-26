@@ -1182,6 +1182,24 @@ TESTCASES_NOCASELIST_MUL = [
         None, None, True
     ),
     (
+        "Empty list times -0.5 (must be integer)",
+        dict(
+            nclist=NocaseList(),
+            number=-0.5,
+            exp_result=NocaseList(),
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Empty list times +0.5 (must be integer)",
+        dict(
+            nclist=NocaseList(),
+            number=+0.5,
+            exp_result=NocaseList(),
+        ),
+        TypeError, None, True
+    ),
+    (
         "List with two items times -1",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
@@ -1279,6 +1297,7 @@ def test_NocaseList_imul(testcase, nclist, number, exp_result):
 
     # Don't change the testcase data, but a copy
     nclist_copy = NocaseList(nclist)
+    nclist_copy_id = id(nclist_copy)
 
     # The code to be tested
     nclist_copy *= number
@@ -1286,6 +1305,9 @@ def test_NocaseList_imul(testcase, nclist, number, exp_result):
     # Ensure that exceptions raised in the remainder of this function
     # are not mistaken as expected exceptions
     assert testcase.exp_exc_types is None
+
+    # Verify the object has been changed in place
+    assert id(nclist_copy) == nclist_copy_id
 
     assert_equal(nclist_copy, exp_result)
 
