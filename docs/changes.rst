@@ -16,6 +16,11 @@ Released: not yet
 
 **Bug fixes:**
 
+* Fixed the incorrect behavior of the '+' and '+=' operators to now (correctly)
+  treat the right hand operand as an iterable of items to be added, instead of
+  (incorrectly) as a single item. For '+', the right hand operand now must
+  be a list, consistent with the built-in list class. (See issue #25)
+
 **Enhancements:**
 
 * Test: Coveralls now runs on all python versions, merging the result.
