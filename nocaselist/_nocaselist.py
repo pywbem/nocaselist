@@ -115,26 +115,43 @@ class NocaseList(list):
         """
         return value.lower() in self._lc_list
 
-    def __add__(self, value):
+    def __add__(self, other):
         """
-        Return a shallow copy of the list, that has a new item with the value
-        appended at the end. The original list is not changed.
+        Return a new :class:`NocaseList` object that contains the items from
+        the left hand operand (``self``) and the items from the right hand
+        operand (``other``).
 
-        Invoked using ``ncl + value``.
+        The right hand operand (``other``) must be an instance of
+        :class:`py:list` (including :class:`NocaseList`) or :class:`py:tuple`.
+        The operands are not changed.
+
+        Invoked using e.g. ``ncl + other``
+
+        Raises:
+          TypeError: The other iterable is not a list or tuple
         """
+        if not isinstance(other, (list, tuple)):
+            raise TypeError(
+                "Can only concatenate list or tuple (not {t}) to NocaseList".
+                format(t=type(other)))
         lst = self.copy()
-        lst.append(value)
+        lst.extend(other)
         return lst
 
-    def __iadd__(self, value):
+    def __iadd__(self, other):
         """
-        Append a new item with the specified value to the list.
+        Extend the left hand operand (``self``) by the items from the right
+        hand operand (``other``).
 
-        Invoked using ``ncl += value``.
+        The ``other`` parameter must be an iterable but is otherwise not
+        restricted in type. Thus, if it is a string, the characters of the
+        string are added as distinct items to the list.
+
+        Invoked using ``ncl += other``.
         """
         # Note: It is unusual that the method has to return self, but it was
         # verified that this is necessary.
-        self.append(value)
+        self.extend(other)
         return self
 
     def __mul__(self, number):

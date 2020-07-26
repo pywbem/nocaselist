@@ -915,42 +915,79 @@ TESTCASES_NOCASELIST_ADD = [
     # Each list item is a testcase tuple with these items:
     # * desc: Short testcase description.
     # * kwargs: Keyword arguments for the test function:
-    #   * nclist: NocaseList object to be used for the test.
-    #   * value: Value to be appended to the list.
+    #   * nclist: NocaseList (LHO) object to be used for the test.
+    #   * other: Other iterable (RHO) to be used for the test.
     #   * exp_result: Expected result of the test function, or None.
     # * exp_exc_types: Expected exception type(s), or None.
     # * exp_warn_types: Expected warning type(s), or None.
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Add an item to an empty list",
+        "Add an empty NocaseList and a string (must be list/tuple)",
         dict(
             nclist=NocaseList(),
-            value='Dog',
-            exp_result=NocaseList(['Dog']),
-        ),
-        TypeError if TEST_AGAINST_LIST else None, None, True
-        # TODO(issue #25): Make behavior consistent to standard list
-    ),
-    (
-        "Add an item to a list with two items",
-        dict(
-            nclist=NocaseList(['Dog', 'Cat']),
-            value='Kitten',
-            exp_result=NocaseList(['Dog', 'Cat', 'Kitten']),
-        ),
-        TypeError if TEST_AGAINST_LIST else None, None, True
-        # TODO(issue #25): Make behavior consistent to standard list
-    ),
-    (
-        "Add an integer item to a list with two items (no lower())",
-        dict(
-            nclist=NocaseList(['Dog', 'Cat']),
-            value=42,
+            other='Dog',
             exp_result=None,
         ),
-        TypeError if TEST_AGAINST_LIST else AttributeError, None, True
-        # TODO(issue #25): Make behavior consistent to standard list
+        TypeError, None, True
+    ),
+    (
+        "Add an empty NocaseList and an integer (must be list/tuple)",
+        dict(
+            nclist=NocaseList(),
+            other=42,
+            exp_result=None,
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Add an empty NocaseList and a tuple (list: must be list, "
+        "NocaseList: success)",
+        dict(
+            nclist=NocaseList(),
+            other=('Dog',),
+            exp_result=None if TEST_AGAINST_LIST \
+            else NocaseList(['Dog']),
+        ),
+        TypeError if TEST_AGAINST_LIST else None, None, True
+        # This is an extension of NocaseList over list
+    ),
+    (
+        "Add an empty NocaseList and a list with one string item",
+        dict(
+            nclist=NocaseList(),
+            other=['Dog'],
+            exp_result=NocaseList(['Dog']),
+        ),
+        None, None, True
+    ),
+    (
+        "Add an empty NocaseList and a NocaseList with one string item",
+        dict(
+            nclist=NocaseList(),
+            other=NocaseList(['Dog']),
+            exp_result=NocaseList(['Dog']),
+        ),
+        None, None, True
+    ),
+    (
+        "Add an empty NocaseList and a list with one integer item "
+        "(list: success, NocaseList: no lower)",
+        dict(
+            nclist=NocaseList(),
+            other=[42],
+            exp_result=NocaseList([42]) if TEST_AGAINST_LIST else None,
+        ),
+        None if TEST_AGAINST_LIST else AttributeError, None, True
+    ),
+    (
+        "Add a NocaseList with two items and a list with two items",
+        dict(
+            nclist=NocaseList(['Dog', 'Cat']),
+            other=['Budgie', 'Fish'],
+            exp_result=NocaseList(['Dog', 'Cat', 'Budgie', 'Fish']),
+        ),
+        None, None, True
     ),
 ]
 
@@ -959,7 +996,7 @@ TESTCASES_NOCASELIST_ADD = [
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
     TESTCASES_NOCASELIST_ADD)
 @simplified_test_function
-def test_NocaseList_add(testcase, nclist, value, exp_result):
+def test_NocaseList_add(testcase, nclist, other, exp_result):
     """
     Test function for NocaseList.__add__() / ncl + val
     """
@@ -967,7 +1004,7 @@ def test_NocaseList_add(testcase, nclist, value, exp_result):
     org_nclist = NocaseList(nclist)
 
     # The code to be tested
-    result = nclist + value
+    result = nclist + other
 
     # Verify the input NocaseList object has not changed
     assert_equal(nclist, org_nclist)
@@ -986,44 +1023,76 @@ TESTCASES_NOCASELIST_IADD = [
     # Each list item is a testcase tuple with these items:
     # * desc: Short testcase description.
     # * kwargs: Keyword arguments for the test function:
-    #   * nclist: NocaseList object to be used for the test.
-    #   * value: Value to be appended to the list.
+    #   * nclist: NocaseList (LHO) object to be used for the test.
+    #   * other: Other iterable (RHO) to be used for the test.
     #   * exp_result: Expected result of the test function, or None.
     # * exp_exc_types: Expected exception type(s), or None.
     # * exp_warn_types: Expected warning type(s), or None.
     # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
 
     (
-        "Add an item to an empty list",
+        "Extend an empty NocaseList by a string (string chars become items)",
         dict(
             nclist=NocaseList(),
-            value='Dog',
-            exp_result=NocaseList(['D', 'o', 'g']) if TEST_AGAINST_LIST \
-            else NocaseList(['Dog']),
-            # TODO(issue #25): Make behavior consistent to standard list
+            other='Dog',
+            exp_result=NocaseList(['D', 'o', 'g']),
         ),
         None, None, True
     ),
     (
-        "Add an item to a list with two items",
+        "Extend an empty NocaseList by an integer (no iterable)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
-            value='Kit',
-            exp_result=NocaseList(['Dog', 'Cat', 'K', 'i', 't']) if \
-            TEST_AGAINST_LIST else NocaseList(['Dog', 'Cat', 'Kit']),
-            # TODO(issue #25): Make behavior consistent to standard list
-        ),
-        None, None, True
-    ),
-    (
-        "Add an integer item to a list with two items (no lower())",
-        dict(
-            nclist=NocaseList(['Dog', 'Cat']),
-            value=42,
+            nclist=NocaseList(),
+            other=42,
             exp_result=None,
         ),
-        TypeError if TEST_AGAINST_LIST else AttributeError, None, True
-        # TODO(issue #25): Make behavior consistent to standard list
+        TypeError, None, True
+    ),
+    (
+        "Extend an empty NocaseList by a tuple",
+        dict(
+            nclist=NocaseList(),
+            other=('Dog',),
+            exp_result=NocaseList(['Dog']),
+        ),
+        None, None, True
+    ),
+    (
+        "Extend an empty NocaseList by a list with one string item",
+        dict(
+            nclist=NocaseList(),
+            other=['Dog'],
+            exp_result=NocaseList(['Dog']),
+        ),
+        None, None, True
+    ),
+    (
+        "Extend an empty NocaseList by a NocaseList with one string item",
+        dict(
+            nclist=NocaseList(),
+            other=NocaseList(['Dog']),
+            exp_result=NocaseList(['Dog']),
+        ),
+        None, None, True
+    ),
+    (
+        "Extend an empty NocaseList by a list with one integer item "
+        "(list: success, NocaseList: no lower)",
+        dict(
+            nclist=NocaseList(),
+            other=[42],
+            exp_result=NocaseList([42]) if TEST_AGAINST_LIST else None,
+        ),
+        None if TEST_AGAINST_LIST else AttributeError, None, True
+    ),
+    (
+        "Extend a NocaseList with two items by a list with two items",
+        dict(
+            nclist=NocaseList(['Dog', 'Cat']),
+            other=['Budgie', 'Fish'],
+            exp_result=NocaseList(['Dog', 'Cat', 'Budgie', 'Fish']),
+        ),
+        None, None, True
     ),
 ]
 
@@ -1032,20 +1101,24 @@ TESTCASES_NOCASELIST_IADD = [
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
     TESTCASES_NOCASELIST_IADD)
 @simplified_test_function
-def test_NocaseList_iadd(testcase, nclist, value, exp_result):
+def test_NocaseList_iadd(testcase, nclist, other, exp_result):
     """
     Test function for NocaseList.__iadd__() / ncl += val
     """
 
     # Don't change the testcase data, but a copy
     nclist_copy = NocaseList(nclist)
+    nclist_copy_id = id(nclist_copy)
 
     # The code to be tested
-    nclist_copy += value
+    nclist_copy += other
 
     # Ensure that exceptions raised in the remainder of this function
     # are not mistaken as expected exceptions
     assert testcase.exp_exc_types is None
+
+    # Verify the object has been changed in place
+    assert id(nclist_copy) == nclist_copy_id
 
     assert_equal(nclist_copy, exp_result)
 
