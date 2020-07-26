@@ -27,6 +27,8 @@ Released: not yet
 
 * Removed enforcement of Python version at run time. (See issue #18)
 
+* Docs: Switched Sphinx theme to sphinx_rtd_theme (See issue #19)
+
 **Cleanup:**
 
 **Known issues:**
