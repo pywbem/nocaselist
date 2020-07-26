@@ -5,6 +5,7 @@ Test the NocaseList class.
 from __future__ import absolute_import
 
 import sys
+import os
 import re
 import pytest
 
@@ -13,12 +14,21 @@ from ..utils.simplified_test_function import simplified_test_function
 # pylint: disable=wrong-import-position, wrong-import-order, invalid-name
 from ..utils.import_installed import import_installed
 nocaselist = import_installed('nocaselist')
-from nocaselist import NocaseList  # noqa: E402
+from nocaselist import NocaseList as _NocaseList  # noqa: E402
 # pylint: enable=wrong-import-position, wrong-import-order, invalid-name
 
+# Controls whether the tests are run against a standard dict instead.
+TEST_AGAINST_LIST = bool(os.getenv('TEST_AGAINST_LIST'))
 
-# Flag indicating that standard dict preserves order
-DICT_PRESERVES_ORDER = sys.version_info[0:2] >= (3, 6)
+if TEST_AGAINST_LIST:
+    print("\nInfo: test_nocaselist.py tests run against standard list")
+
+# The list class being tested
+# pylint: disable=invalid-name
+NocaseList = list if TEST_AGAINST_LIST else _NocaseList
+
+# Flag indicating that standard dict is guaranteed to preserve order
+DICT_PRESERVES_ORDER = sys.version_info[0:2] >= (3, 7)
 
 
 def assert_equal(list1, list2, verify_order=True):
@@ -26,12 +36,9 @@ def assert_equal(list1, list2, verify_order=True):
     Assert that list1 is equal to list2.
     Check consistency of list1.
 
-    list1: Must be a NocaseList object.
-    list2: Must be a NocaseList or iterable object.
+    list1: Must be a NocaseList or list object.
+    list2: Must be a NocaseList or list or iterable object.
     """
-
-    assert isinstance(list1, NocaseList)
-    list1_lc = list1._lc_list  # pylint: disable=protected-access
 
     list1_lst = list(list1)  # Uses NocaseList.__iter__()
     list2_lst = list(list2)  # Uses NocaseList.__iter__()
@@ -43,10 +50,12 @@ def assert_equal(list1, list2, verify_order=True):
 
     # Check consistency of list1 between its internal lower-cased list and
     # its external list
-    assert len(list1_lst) == len(list1_lc)
-    for i, value in enumerate(list1):  # Uses NocaseList.__iter__()
-        value_lc = list1_lc[i]
-        assert value.lower() == value_lc
+    if isinstance(list1, _NocaseList):
+        list1_lc = list1._lc_list  # pylint: disable=protected-access
+        assert len(list1_lst) == len(list1_lc)
+        for i, value in enumerate(list1):  # Uses NocaseList.__iter__()
+            value_lc = list1_lc[i]
+            assert value.lower() == value_lc
 
 
 TESTCASES_NOCASELIST_INIT = [
@@ -115,16 +124,6 @@ TESTCASES_NOCASELIST_INIT = [
         ),
         None, None, True
     ),
-    (
-        "Empty list from empty NocaseList as keyword arg",
-        dict(
-            init_args=(),
-            init_kwargs=dict(iterable=NocaseList()),
-            exp_list=[],
-            verify_order=True,
-        ),
-        None, None, True
-    ),
 
     # Non-empty NocaseList
     (
@@ -167,18 +166,19 @@ TESTCASES_NOCASELIST_INIT = [
         ),
         None, None, True
     ),
-    (
-        "List from list as keyword arg",
-        dict(
-            init_args=(),
-            init_kwargs=dict(iterable=['Dog', 'Cat']),
-            exp_list=['Dog', 'Cat'],
-            verify_order=True,
-        ),
-        None, None, True
-    ),
 
     # Error cases
+    (
+        "'iterable' keyword arg (no kwargs)",
+        dict(
+            init_args=(),
+            init_kwargs=dict(iterable=[1, 2]),
+            exp_list=None,
+            verify_order=None,
+        ),
+        TypeError if TEST_AGAINST_LIST else AttributeError, None, True
+        # TODO(issue #25): Make behavior consistent to standard list
+    ),
     (
         "None as positional arg (is not iterable)",
         dict(
@@ -729,18 +729,18 @@ TESTCASES_NOCASELIST_CONTAINS = [
         dict(
             nclist=NocaseList(),
             value=None,
-            exp_result=None,
+            exp_result=False if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "Empty list, with integer value 0 (no lower() method)",
         dict(
             nclist=NocaseList(),
             value=0,
-            exp_result=None,
+            exp_result=False if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "Empty list, with non-existing empty value (not found)",
@@ -767,18 +767,18 @@ TESTCASES_NOCASELIST_CONTAINS = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=None,
-            exp_result=None,
+            exp_result=False if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
-        "Empty list, with integer value 0 (no lower() method)",
+        "List with two items, with integer value 0 (no lower() method)",
         dict(
-            nclist=NocaseList(),
+            nclist=NocaseList(['Dog', 'Cat']),
             value=0,
-            exp_result=None,
+            exp_result=False if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "List with two items, with non-existing empty value (not found)",
@@ -812,7 +812,7 @@ TESTCASES_NOCASELIST_CONTAINS = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value='DOG',
-            exp_result=True,
+            exp_result=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -821,7 +821,7 @@ TESTCASES_NOCASELIST_CONTAINS = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value='dog',
-            exp_result=True,
+            exp_result=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -830,7 +830,7 @@ TESTCASES_NOCASELIST_CONTAINS = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value='doG',
-            exp_result=True,
+            exp_result=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -911,7 +911,6 @@ def test_NocaseList_sizeof(testcase, nclist, exp_result):
 TESTCASES_NOCASELIST_ADD = [
 
     # Testcases for NocaseList.__add__() / ncl + val
-    # Testcases for NocaseList.__iadd__() / ncl += val
 
     # Each list item is a testcase tuple with these items:
     # * desc: Short testcase description.
@@ -930,7 +929,8 @@ TESTCASES_NOCASELIST_ADD = [
             value='Dog',
             exp_result=NocaseList(['Dog']),
         ),
-        None, None, True
+        TypeError if TEST_AGAINST_LIST else None, None, True
+        # TODO(issue #25): Make behavior consistent to standard list
     ),
     (
         "Add an item to a list with two items",
@@ -939,7 +939,8 @@ TESTCASES_NOCASELIST_ADD = [
             value='Kitten',
             exp_result=NocaseList(['Dog', 'Cat', 'Kitten']),
         ),
-        None, None, True
+        TypeError if TEST_AGAINST_LIST else None, None, True
+        # TODO(issue #25): Make behavior consistent to standard list
     ),
     (
         "Add an integer item to a list with two items (no lower())",
@@ -948,7 +949,8 @@ TESTCASES_NOCASELIST_ADD = [
             value=42,
             exp_result=None,
         ),
-        AttributeError, None, True
+        TypeError if TEST_AGAINST_LIST else AttributeError, None, True
+        # TODO(issue #25): Make behavior consistent to standard list
     ),
 ]
 
@@ -977,9 +979,58 @@ def test_NocaseList_add(testcase, nclist, value, exp_result):
     assert_equal(result, exp_result)
 
 
+TESTCASES_NOCASELIST_IADD = [
+
+    # Testcases for NocaseList.__iadd__() / ncl += val
+
+    # Each list item is a testcase tuple with these items:
+    # * desc: Short testcase description.
+    # * kwargs: Keyword arguments for the test function:
+    #   * nclist: NocaseList object to be used for the test.
+    #   * value: Value to be appended to the list.
+    #   * exp_result: Expected result of the test function, or None.
+    # * exp_exc_types: Expected exception type(s), or None.
+    # * exp_warn_types: Expected warning type(s), or None.
+    # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
+
+    (
+        "Add an item to an empty list",
+        dict(
+            nclist=NocaseList(),
+            value='Dog',
+            exp_result=NocaseList(['D', 'o', 'g']) if TEST_AGAINST_LIST \
+            else NocaseList(['Dog']),
+            # TODO(issue #25): Make behavior consistent to standard list
+        ),
+        None, None, True
+    ),
+    (
+        "Add an item to a list with two items",
+        dict(
+            nclist=NocaseList(['Dog', 'Cat']),
+            value='Kit',
+            exp_result=NocaseList(['Dog', 'Cat', 'K', 'i', 't']) if \
+            TEST_AGAINST_LIST else NocaseList(['Dog', 'Cat', 'Kit']),
+            # TODO(issue #25): Make behavior consistent to standard list
+        ),
+        None, None, True
+    ),
+    (
+        "Add an integer item to a list with two items (no lower())",
+        dict(
+            nclist=NocaseList(['Dog', 'Cat']),
+            value=42,
+            exp_result=None,
+        ),
+        TypeError if TEST_AGAINST_LIST else AttributeError, None, True
+        # TODO(issue #25): Make behavior consistent to standard list
+    ),
+]
+
+
 @pytest.mark.parametrize(
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
-    TESTCASES_NOCASELIST_ADD)
+    TESTCASES_NOCASELIST_IADD)
 @simplified_test_function
 def test_NocaseList_iadd(testcase, nclist, value, exp_result):
     """
@@ -1316,9 +1367,9 @@ TESTCASES_NOCASELIST_COMPARE = [
         dict(
             obj1=NocaseList(['Cat']),
             obj2=NocaseList(['caT']),
-            exp_eq=True,
+            exp_eq=not TEST_AGAINST_LIST,
             exp_gt=False,
-            exp_lt=False,
+            exp_lt=TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -1327,33 +1378,33 @@ TESTCASES_NOCASELIST_COMPARE = [
         dict(
             obj1=NocaseList(['Cat']),
             obj2=list(['caT']),
-            exp_eq=True,
+            exp_eq=not TEST_AGAINST_LIST,
             exp_gt=False,
-            exp_lt=False,
+            exp_lt=TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
     (
-        "Lists with one item, that are case-insensitively < but "
-        "case-sensitively >",
+        "Lists with one item, that are case-insensitively lt but "
+        "case-sensitively gt",
         dict(
             obj1=NocaseList(['cat']),
             obj2=NocaseList(['Dog']),
             exp_eq=False,
-            exp_gt=False,
-            exp_lt=True,
+            exp_gt=TEST_AGAINST_LIST,
+            exp_lt=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
     (
-        "Lists with one item, that are case-insensitively < but "
-        "case-sensitively > (list)",
+        "Lists with one item, that are case-insensitively lt but "
+        "case-sensitively gt (list)",
         dict(
             obj1=NocaseList(['cat']),
             obj2=list(['Dog']),
             exp_eq=False,
-            exp_gt=False,
-            exp_lt=True,
+            exp_gt=TEST_AGAINST_LIST,
+            exp_lt=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -1364,8 +1415,8 @@ TESTCASES_NOCASELIST_COMPARE = [
             obj1=NocaseList(['cat']),
             obj2=NocaseList(['Cat', 'Dog']),
             exp_eq=False,
-            exp_gt=False,
-            exp_lt=True,
+            exp_gt=TEST_AGAINST_LIST,
+            exp_lt=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -1376,8 +1427,8 @@ TESTCASES_NOCASELIST_COMPARE = [
             obj1=NocaseList(['cat']),
             obj2=list(['Cat', 'Dog']),
             exp_eq=False,
-            exp_gt=False,
-            exp_lt=True,
+            exp_gt=TEST_AGAINST_LIST,
+            exp_lt=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -1387,8 +1438,8 @@ TESTCASES_NOCASELIST_COMPARE = [
             obj1=NocaseList(['cat']),
             obj2=NocaseList(['Kitten', 'Dog']),
             exp_eq=False,
-            exp_gt=False,
-            exp_lt=True,
+            exp_gt=TEST_AGAINST_LIST,
+            exp_lt=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -1399,8 +1450,8 @@ TESTCASES_NOCASELIST_COMPARE = [
             obj1=NocaseList(['cat']),
             obj2=list(['Kitten', 'Dog']),
             exp_eq=False,
-            exp_gt=False,
-            exp_lt=True,
+            exp_gt=TEST_AGAINST_LIST,
+            exp_lt=not TEST_AGAINST_LIST,
         ),
         None, None, True
     ),
@@ -1409,8 +1460,8 @@ TESTCASES_NOCASELIST_COMPARE = [
         dict(
             obj1=NocaseList(['Cat', 'Dog']),
             obj2=NocaseList(['CAT', 'DOG']),
-            exp_eq=True,
-            exp_gt=False,
+            exp_eq=not TEST_AGAINST_LIST,
+            exp_gt=TEST_AGAINST_LIST,
             exp_lt=False,
         ),
         None, None, True
@@ -1421,8 +1472,8 @@ TESTCASES_NOCASELIST_COMPARE = [
         dict(
             obj1=NocaseList(['Cat', 'Dog']),
             obj2=list(['CAT', 'DOG']),
-            exp_eq=True,
-            exp_gt=False,
+            exp_eq=not TEST_AGAINST_LIST,
+            exp_gt=TEST_AGAINST_LIST,
             exp_lt=False,
         ),
         None, None, True
@@ -1622,9 +1673,9 @@ TESTCASES_NOCASELIST_COUNT = [
         dict(
             nclist=NocaseList(),
             value=1234,
-            exp_result=None,
+            exp_result=0 if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "Empty list, with non-empty string value",
@@ -1642,9 +1693,9 @@ TESTCASES_NOCASELIST_COUNT = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=1234,
-            exp_result=None,
+            exp_result=0 if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "List with two items, with non-matching empty string value",
@@ -1670,7 +1721,7 @@ TESTCASES_NOCASELIST_COUNT = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value='caT',
-            exp_result=1,
+            exp_result=0 if TEST_AGAINST_LIST else 1,
         ),
         None, None, True
     ),
@@ -1680,7 +1731,7 @@ TESTCASES_NOCASELIST_COUNT = [
         dict(
             nclist=NocaseList(['Cat', 'Dog', 'Cat', 'cat']),
             value='caT',
-            exp_result=3,
+            exp_result=0 if TEST_AGAINST_LIST else 3,
         ),
         None, None, True
     ),
@@ -1743,6 +1794,9 @@ def test_NocaseList_copy(testcase, nclist):
     """
     Test function for NocaseList.copy()
     """
+
+    if TEST_AGAINST_LIST:
+        pytest.skip("built-in list class does not support copy()")
 
     # The code to be tested
     nclist_copy = nclist.copy()
@@ -1840,7 +1894,7 @@ TESTCASES_NOCASELIST_INDEX = [
             args=(1234,),
             exp_result=None,
         ),
-        AttributeError, None, True
+        ValueError if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "Empty list, with non-existing string value (not in list)",
@@ -1860,7 +1914,7 @@ TESTCASES_NOCASELIST_INDEX = [
             args=(1234,),
             exp_result=None,
         ),
-        AttributeError, None, True
+        ValueError if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "List with two items, with non-existing empty string value",
@@ -1877,9 +1931,9 @@ TESTCASES_NOCASELIST_INDEX = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             args=('doG',),
-            exp_result=0,
+            exp_result=None if TEST_AGAINST_LIST else 0,
         ),
-        None, None, True
+        ValueError if TEST_AGAINST_LIST else None, None, True
     ),
     (
         "List with two items, with case-insensitively existing string value "
@@ -1887,9 +1941,9 @@ TESTCASES_NOCASELIST_INDEX = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             args=('cAt',),
-            exp_result=1,
+            exp_result=None if TEST_AGAINST_LIST else 1,
         ),
-        None, None, True
+        ValueError if TEST_AGAINST_LIST else None, None, True
     ),
     (
         "List with two items, with start at 1 and string value of index 0",
@@ -1905,9 +1959,9 @@ TESTCASES_NOCASELIST_INDEX = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             args=('caT', 1),
-            exp_result=1,
+            exp_result=None if TEST_AGAINST_LIST else 1,
         ),
-        None, None, True
+        ValueError if TEST_AGAINST_LIST else None, None, True
     ),
 ]
 
@@ -1951,9 +2005,10 @@ TESTCASES_NOCASELIST_APPEND = [
         dict(
             nclist=NocaseList(),
             value=1234,
-            exp_nclist=NocaseList(),
+            exp_nclist=NocaseList([1234]) if TEST_AGAINST_LIST \
+            else NocaseList(),
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "Empty list, with non-empty string value",
@@ -1971,9 +2026,10 @@ TESTCASES_NOCASELIST_APPEND = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=1234,
-            exp_nclist=NocaseList(['Dog', 'Cat']),
+            exp_nclist=NocaseList(['Dog', 'Cat', 1234]) if TEST_AGAINST_LIST \
+            else NocaseList(['Dog', 'Cat']),
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "List with two items, with empty string value",
@@ -2049,9 +2105,9 @@ TESTCASES_NOCASELIST_EXTEND = [
         dict(
             nclist=NocaseList(),
             values=[1234],
-            exp_nclist=None,
+            exp_nclist=[1234] if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "Empty list, with list containing empty string and non-empty string",
@@ -2078,9 +2134,9 @@ TESTCASES_NOCASELIST_EXTEND = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             values=[1234],
-            exp_nclist=None,
+            exp_nclist=['Dog', 'Cat', 1234] if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "List with two items, with empty string value",
@@ -2147,9 +2203,9 @@ TESTCASES_NOCASELIST_INSERT = [
         dict(
             nclist=NocaseList(),
             args=(0, 1234),
-            exp_nclist=None,
+            exp_nclist=[1234] if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "Empty list, inserting string value before index 0",
@@ -2186,9 +2242,9 @@ TESTCASES_NOCASELIST_INSERT = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             args=(0, 1234),
-            exp_nclist=None,
+            exp_nclist=[1234, 'Dog', 'Cat'] if TEST_AGAINST_LIST else None,
         ),
-        AttributeError, None, True
+        None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
         "List with two items, inserting string value before index 0",
@@ -2477,7 +2533,8 @@ TESTCASES_NOCASELIST_SORT = [
         dict(
             nclist=NocaseList(['Dog', 'cat']),
             kwargs=dict(),
-            exp_nclist=NocaseList(['cat', 'Dog']),
+            exp_nclist=['Dog', 'cat'] if TEST_AGAINST_LIST \
+            else NocaseList(['cat', 'Dog']),
         ),
         None, None, True
     ),
@@ -2489,7 +2546,8 @@ TESTCASES_NOCASELIST_SORT = [
             kwargs=dict(
                 reverse=True,
             ),
-            exp_nclist=NocaseList(['Dog', 'cat']),
+            exp_nclist=['cat', 'Dog'] if TEST_AGAINST_LIST \
+            else NocaseList(['Dog', 'cat']),
         ),
         None, None, True
     ),
@@ -2500,7 +2558,8 @@ TESTCASES_NOCASELIST_SORT = [
             kwargs=dict(
                 key=lambda x: x[1],  # sort by second character
             ),
-            exp_nclist=NocaseList(['cat', 'BUdgie']),
+            exp_nclist=['BUdgie', 'cat'] if TEST_AGAINST_LIST \
+            else NocaseList(['cat', 'BUdgie']),
         ),
         None, None, True
     ),
@@ -2513,7 +2572,8 @@ TESTCASES_NOCASELIST_SORT = [
                 key=lambda x: x[1],  # sort by second character
                 reverse=True,
             ),
-            exp_nclist=NocaseList(['BUdgie', 'cat']),
+            exp_nclist=['cat', 'BUdgie'] if TEST_AGAINST_LIST \
+            else NocaseList(['BUdgie', 'cat']),
         ),
         None, None, True
     ),

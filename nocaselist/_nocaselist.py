@@ -281,6 +281,9 @@ class NocaseList(list):
     def copy(self):
         """
         Return a shallow copy of the list.
+
+        Note: This method is supported on Python 2 and Python 3, even though
+        the built-in list class only supports it on Python 3.
         """
         return NocaseList(self)
 

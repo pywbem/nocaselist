@@ -21,6 +21,10 @@ Released: not yet
 * Test: Coveralls now runs on all python versions, merging the result.
   (See issue #17)
 
+* Test: Added support for testing against standard list, by adding a new
+  make target 'testlist', and running that test on the Travis and Appveyor CIs.
+  (See issue #16)
+
 **Cleanup:**
 
 **Known issues:**
