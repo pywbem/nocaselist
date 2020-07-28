@@ -39,6 +39,9 @@ Released: not yet
 * Docs: Switched links to items in the Python documentation to go to Python 3
   instead of Python 2.
 
+* Added support for the clear() method on Python 2.7 (where the built-in list
+  class does not support it yet). (See issue #30)
+
 * Docs: Clarified that NocaseList supports the functionality of the built-in
   list class as of Python 3.8, including all methods that have been added since
   Python 2.7, on all Python versions.

@@ -25,8 +25,8 @@ nocaselist - A case-insensitive list for Python
 Overview
 --------
 
-Class ``NocaseList`` is a case-insensitive list that preserves
-the lexical case of its items.
+Class `NocaseList`_ is a case-insensitive list that preserves the lexical case
+of its items.
 
 Example:
 
@@ -43,6 +43,13 @@ Example:
     >>> 'ALPHA' in list1  # Any lookup or comparison is case-insensitive
     True
 
+The `NocaseList`_ class supports the functionality of the built-in
+`list class of Python 3.8`_ on all Python versions it supports (except for being
+case-insensitive, of course). This includes the ``clear()`` and ``copy()``
+methods added in Python 3.3 to the built-in ``list`` class.
+
+.. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
+.. _NocaseList: https://nocaselist.readthedocs.io/en/stable/reference.html#nocaselist.NocaseList
 
 Installation
 ------------
