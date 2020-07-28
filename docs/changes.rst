@@ -5,14 +5,10 @@ Change log
 ==========
 
 
-nocaselist 1.0.1.dev1
----------------------
+nocaselist 1.0.1
+----------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2020-07-28
 
 **Bug fixes:**
 
@@ -27,6 +23,18 @@ Released: not yet
 
 **Enhancements:**
 
+* Removed enforcement of Python version at run time. (See issue #18)
+
+* Added support for the clear() method on Python 2.7 (where the built-in list
+  class does not support it yet). (See issue #30)
+
+* The `*=` operator now modifies the left hand operand list in place, instead of
+  returning a new list. Note that both is correct behavior. (Part of issue #27)
+
+* Improved the performance of initializing a NocaseList object by copying
+  the internal lower-cased list when possible, instead of rebuilding it from
+  the original list.
+
 * Test: Coveralls now runs on all python versions, merging the result.
   (See issue #17)
 
@@ -34,38 +42,16 @@ Released: not yet
   make target 'testlist', and running that test on the Travis and Appveyor CIs.
   (See issue #16)
 
-* Removed enforcement of Python version at run time. (See issue #18)
-
-* Docs: Switched Sphinx theme to sphinx_rtd_theme (See issue #19)
-
-* Docs: Documented exceptions that can be raised, in all methods.
-
-* Docs: Switched links to items in the Python documentation to go to Python 3
-  instead of Python 2.
-
-* Added support for the clear() method on Python 2.7 (where the built-in list
-  class does not support it yet). (See issue #30)
-
 * Docs: Clarified that NocaseList supports the functionality of the built-in
   list class as of Python 3.8, including all methods that have been added since
   Python 2.7, on all Python versions.
 
-<<<<<<< HEAD
-* Improved the performance of initializing a NocaseList object by copying
-  the internal lower-cased list when possible, instead of rebuilding it from
-  the original list.
-=======
-* The `*=` operator now modifies the left hand operand list in place, instead of
-  returning a new list. Note that both is correct behavior. (Part of issue #27)
->>>>>>> 76dc790... Fixed the incorrect behavior of the `*` and `*=` operators
+* Docs: Documented exceptions that can be raised, in all methods.
 
-**Cleanup:**
+* Docs: Switched Sphinx theme to sphinx_rtd_theme (See issue #19)
 
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
+* Docs: Switched links to items in the Python documentation to go to Python 3
+  instead of Python 2.
 
 
 nocaselist 1.0.0
