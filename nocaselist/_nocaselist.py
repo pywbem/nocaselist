@@ -39,19 +39,6 @@ class NocaseList(list):
 
     The implementation maintains a second list with the lower-cased items of
     the inherited list, and ensures that both lists are in sync.
-
-    The :class:`NocaseList` class supports the functionality of the built-in
-    `list class of Python 3.8`_, so its documentation applies completely.
-    Methods that have been added to the built-in :class:`py3:list`
-    class between Python 2.7 and Python 3.8 (i.e. :meth:`~NocaseList.clear` and
-    :meth:`~NocaseList.copy`) are supported by the :class:`NocaseList` class on
-    all Python versions.
-
-    The following documentation is provided only for explicit documentation of
-    the case-insensitive behavior, and to indicate which methods have been
-    implemented for maintaining the second lower-cased list.
-
-    .. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
     """  # noqa E401
     # pylint: enable=line-too-long
 
@@ -328,10 +315,15 @@ class NocaseList(list):
         """
         Remove all items from the list (and return None).
 
-        Note: This method was introduced in Python 3.
+        Note: This method is supported on Python 2 and Python 3, even though
+        the built-in list class only supports it on Python 3.
         """
-        super(NocaseList, self).clear()
-        self._lc_list.clear()
+        try:
+            super(NocaseList, self).clear()
+            self._lc_list.clear()
+        except AttributeError:
+            del self[:]
+            del self._lc_list[:]
 
     def index(self, value, start=0, stop=9223372036854775807):
         """

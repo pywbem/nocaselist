@@ -23,6 +23,12 @@ TEST_AGAINST_LIST = bool(os.getenv('TEST_AGAINST_LIST'))
 if TEST_AGAINST_LIST:
     print("\nInfo: test_nocaselist.py tests run against standard list")
 
+# Indicates that the list to be tested has a copy() method
+LIST_HAS_COPY = not TEST_AGAINST_LIST or sys.version_info[0] == 3
+
+# Indicates that the list to be tested has a clear() method
+LIST_HAS_CLEAR = not TEST_AGAINST_LIST or sys.version_info[0] == 3
+
 # The list class being tested
 # pylint: disable=invalid-name
 NocaseList = list if TEST_AGAINST_LIST else _NocaseList
@@ -749,7 +755,7 @@ TESTCASES_NOCASELIST_CONTAINS = [
             value='',
             exp_result=False,
         ),
-        None, None, False
+        None, None, True
     ),
     (
         "Empty list, with non-existing non-empty value (not found)",
@@ -758,7 +764,7 @@ TESTCASES_NOCASELIST_CONTAINS = [
             value='Dog',
             exp_result=False,
         ),
-        None, None, False
+        None, None, True
     ),
 
     # Non-empty NocaseList
@@ -1774,14 +1780,14 @@ TESTCASES_NOCASELIST_COPY = [
         dict(
             nclist=NocaseList(),
         ),
-        None, None, True
+        None if LIST_HAS_COPY else AttributeError, None, True
     ),
     (
         "List with two items",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
         ),
-        None, None, True
+        None if LIST_HAS_COPY else AttributeError, None, True
     ),
 ]
 
@@ -1794,9 +1800,6 @@ def test_NocaseList_copy(testcase, nclist):
     """
     Test function for NocaseList.copy()
     """
-
-    if TEST_AGAINST_LIST:
-        pytest.skip("built-in list class does not support copy()")
 
     # The code to be tested
     nclist_copy = nclist.copy()
@@ -1828,14 +1831,14 @@ TESTCASES_NOCASELIST_CLEAR = [
         dict(
             nclist=NocaseList(),
         ),
-        None, None, True
+        None if LIST_HAS_CLEAR else AttributeError, None, True
     ),
     (
         "List with two items",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
         ),
-        None, None, True
+        None if LIST_HAS_CLEAR else AttributeError, None, True
     ),
 ]
 
@@ -1848,9 +1851,6 @@ def test_NocaseList_clear(testcase, nclist):
     """
     Test function for NocaseList.clear()
     """
-
-    if not hasattr(list, 'clear'):
-        pytest.skip("On this Python version, list does not have clear()")
 
     # Don't change the testcase data, but a copy
     nclist_copy = NocaseList(nclist)
