@@ -33,12 +33,14 @@ Example:
 Supported environments
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Pywbem is supported in these environments:
+The package does not have any dependencies on the type of operating system and
+is regularly tested in CI systems on the following operating systems:
 
-* Operating Systems: Linux, Windows (native, and with UNIX-like environments),
-  OS-X
+* Ubuntu, native Windows, CygWin, OS-X / macOS
 
-* Python: 2.7, 3.4, and higher
+The package is supported on the following Python versions:
+
+* Python: 2.7, 3.4 and all higher 3.x versions
 
 
 .. _`Installing`:
