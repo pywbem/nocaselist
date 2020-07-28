@@ -46,6 +46,10 @@ Released: not yet
   list class as of Python 3.8, including all methods that have been added since
   Python 2.7, on all Python versions.
 
+* Improved the performance of initializing a NocaseList object by copying
+  the internal lower-cased list when possible, instead of rebuilding it from
+  the original list.
+
 **Cleanup:**
 
 **Known issues:**
