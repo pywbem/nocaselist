@@ -78,9 +78,20 @@ class NocaseList(list):
         """
         super(NocaseList, self).__init__(iterable)
 
-        # A list with the same items as the original list, except they are in
-        # lower case.
-        self._lc_list = _lc_list(self)
+        # The _lc_list attribute is a list with the same items as the original
+        # (inherited) list, except they are in lower case.
+
+        # The following is an optimization based on the assumption that in
+        # many cases, lower-casing the input list is more expensive than
+        # copying it (plus the overhead to check that).
+        if isinstance(iterable, NocaseList):
+            try:
+                # pylint: disable=protected-access
+                self._lc_list = iterable._lc_list.copy()
+            except AttributeError:  # No copy() on Python 2
+                self._lc_list = _lc_list(self)
+        else:
+            self._lc_list = _lc_list(self)
 
     def __setitem__(self, index, value):
         """
