@@ -7,6 +7,7 @@ from __future__ import absolute_import
 import sys
 import os
 import re
+import pickle
 import pytest
 
 from ..utils.simplified_test_function import simplified_test_function
@@ -2697,3 +2698,59 @@ def test_NocaseList_sort(testcase, nclist, kwargs, exp_nclist):
 
     assert result is None
     assert_equal(nclist_copy, exp_nclist)
+
+
+TESTCASES_NOCASELIST_PICKLE = [
+
+    # Testcases for pickling and unpickling NocaseList objects
+
+    # Each list item is a testcase tuple with these items:
+    # * desc: Short testcase description.
+    # * kwargs: Keyword arguments for the test function:
+    #   * nclist: NocaseList object to be used for the test.
+    # * exp_exc_types: Expected exception type(s), or None.
+    # * exp_warn_types: Expected warning type(s), or None.
+    # * condition: Boolean condition for testcase to run, or 'pdb' for debugger
+
+    (
+        "Empty list",
+        dict(
+            nclist=NocaseList(),
+        ),
+        None, None, True
+    ),
+    (
+        "List with two items",
+        dict(
+            nclist=NocaseList(['Dog', 'cat']),
+        ),
+        None, None, True
+    ),
+]
+
+
+@pytest.mark.parametrize(
+    "desc, kwargs, exp_exc_types, exp_warn_types, condition",
+    TESTCASES_NOCASELIST_PICKLE)
+@simplified_test_function
+def test_NocaseList_pickle(testcase, nclist):
+    """
+    Test function for pickling and unpickling NocaseList objects
+    """
+
+    # Don't change the testcase data, but a copy
+    nclist_copy = NocaseList(nclist)
+
+    # Pickle the object
+    pkl = pickle.dumps(nclist_copy)
+
+    del nclist_copy
+
+    # Unpickle the object
+    nclist2 = pickle.loads(pkl)
+
+    # Ensure that exceptions raised in the remainder of this function
+    # are not mistaken as expected exceptions
+    assert testcase.exp_exc_types is None
+
+    assert_equal(nclist2, nclist)

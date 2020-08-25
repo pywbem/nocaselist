@@ -5,6 +5,7 @@ This module provides class NocaseList.
 from __future__ import print_function, absolute_import
 
 import sys
+import os
 
 __all__ = ['NocaseList']
 
@@ -13,6 +14,11 @@ if sys.version_info[0] == 2:
     _INTEGER_TYPES = (long, int)  # noqa: F821
 else:
     _INTEGER_TYPES = (int,)
+
+# This env var is set when building the docs. It causes the methods
+# that are supposed to exist only in a particular Python version, not to be
+# removed, so they appear in the docs.
+BUILDING_DOCS = os.environ.get('BUILDING_DOCS', False)
 
 
 def _lc_list(lst):
@@ -47,6 +53,9 @@ class NocaseList(list):
 
     The implementation maintains a second list with the lower-cased items of
     the inherited list, and ensures that both lists are in sync.
+
+    The list supports serialization via the Python :mod:`py:pickle` module.
+    To save space and time, only the originally cased list is serialized.
     """  # noqa E401
     # pylint: enable=line-too-long
 
@@ -87,6 +96,33 @@ class NocaseList(list):
                 self._lc_list = _lc_list(self)
         else:
             self._lc_list = _lc_list(self)
+
+    def __getstate__(self):
+        """
+        Called when pickling the object, see :meth:`py:object.__getstate__`.
+
+        In order to save space and time, only the list with the originally
+        cased items is saved, but not the second list with the lower cased
+        items.
+
+        On Python 2, the 'pickle' module does not call :meth:`__setstate__`,
+        so this optimzation has only be implemented for Python 3.
+        """
+        # This copies the state of the inherited list even though it is
+        # not visible in self.__dict__.
+        state = self.__dict__.copy()
+        del state['_lc_list']
+        return state
+
+    def __setstate__(self, state):
+        """
+        Called when unpickling the object, see :meth:`py:object.__setstate__`.
+
+        On Python 2, the 'pickle' module does not call this method, so this
+        optimzation has only be implemented for Python 3.
+        """
+        self.__dict__.update(state)
+        self._lc_list = _lc_list(self)
 
     def __setitem__(self, index, value):
         """
@@ -422,8 +458,14 @@ class NocaseList(list):
             method.
         """
         super(NocaseList, self).extend(iterable)
-        for value in iterable:
-            self._lc_list.append(value.lower())
+        # The following is a circumvention for a behavior of the 'pickle' module
+        # that during unpickling may call this method on an object that has
+        # been created with __new__() without calling __init__().
+        try:
+            for value in iterable:
+                self._lc_list.append(value.lower())
+        except AttributeError:
+            self._lc_list = _lc_list(self)
 
     def insert(self, index, value):
         """
@@ -489,3 +531,11 @@ class NocaseList(list):
 
         super(NocaseList, self).sort(key=lower_key, reverse=reverse)
         self._lc_list = _lc_list(self)
+
+
+# Remove methods that should only be present in a particular Python version.
+# If the documentation is being built, the methods are not removed in order to
+# show them in the documentation.
+if sys.version_info[0] == 2 and not BUILDING_DOCS:
+    del NocaseList.__setstate__
+    del NocaseList.__getstate__
