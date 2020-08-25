@@ -20,6 +20,9 @@ Released: not yet
 
 **Cleanup:**
 
+* Suppressed new Pylint issue 'super-with-arguments', because this package
+  still supports Python 2.7.
+
 **Known issues:**
 
 * See `list of open issues`_.
