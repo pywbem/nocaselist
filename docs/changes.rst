@@ -16,7 +16,15 @@ Released: not yet
 
 **Bug fixes:**
 
+* Fixed an AttributeError during unpickling. (See issue #37)
+
 **Enhancements:**
+
+* Optimized pickling a NocaseList object by serializing only the original
+  list, but not the second lower-cased list. This optimization is only
+  implemented for Python 3.
+
+* Added tests for pickling and unpickling.
 
 **Cleanup:**
 
