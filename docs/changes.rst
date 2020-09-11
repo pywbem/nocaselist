@@ -5,14 +5,10 @@ Change log
 ==========
 
 
-nocaselist 1.0.2.dev1
----------------------
+nocaselist 1.0.2
+----------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2020-09-11
 
 **Bug fixes:**
 
@@ -30,12 +26,6 @@ Released: not yet
 
 * Suppressed new Pylint issue 'super-with-arguments', because this package
   still supports Python 2.7.
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 1.0.1
