@@ -13,6 +13,8 @@
 /try/
 .ipynb_checkpoints/
 /*.done
+/packaging/*/*.tar.gz
+/packaging/*/*.done
 *.pyc
 *.pyo
 *.log
