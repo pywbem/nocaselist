@@ -17,7 +17,10 @@ Released: not yet
 **Bug fixes:**
 
 * Test: Fixed issue with virtualenv raising AttributeError during installtest
-  on Python 3.4. (see issue #61)
+  on Python 3.4. (see issue #43)
+
+* Added checking for no expected warning. Adjusted a testcase to accomodate
+  the new check. (see issue #45)
 
 **Enhancements:**
 
