@@ -5,13 +5,9 @@ nocaselist - A case-insensitive list for Python
     :target: https://pypi.python.org/pypi/nocaselist/
     :alt: Version on Pypi
 
-.. image:: https://travis-ci.org/pywbem/nocaselist.svg?branch=master
-    :target: https://travis-ci.org/github/pywbem/nocaselist/builds
-    :alt: Travis test status (master)
-
-.. image:: https://ci.appveyor.com/api/projects/status/3ydflnoj5em9s0mr/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/andy-maier/nocaselist/history
-    :alt: Appveyor test status (master)
+.. image:: https://github.com/pywbem/nocaselist/workflows/test/badge.svg?branch=master
+    :target: https://github.com/pywbem/nocaselist/actions/
+    :alt: Actions status
 
 .. image:: https://readthedocs.org/projects/nocaselist/badge/?version=latest
     :target: https://readthedocs.org/projects/nocaselist/builds/
