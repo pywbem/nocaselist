@@ -1,22 +1,14 @@
 %global srcname nocaselist
 
 Name:           python-%{srcname}
-Version:        1.0.2
+Version:        1.0.4
 Release:        1%{?dist}
 Summary:        A case-insensitive list for Python
 
 License:        ASL 2.0
 URL:            https://github.com/pywbem/nocaselist
-Source:         %{pypi_source}
-
+Source0:        %{pypi_source}
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-
-# Test deps
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(six)
 
 %global _description %{expand:
 Python class 'NocaseList' is a case-insensitive list that preserves the
@@ -29,15 +21,15 @@ built-in 'list' class.}
 
 %description %{_description}
 
-%package -n python3-%{srcname}
+%package -n python%{python3_pkgversion}-%{srcname}
 Summary:        %{summary}
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python%{python3_pkgversion}-setuptools
 # Test deps
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(six)
+BuildRequires:  python%{python3_pkgversion}-pytest
+BuildRequires:  python%{python3_pkgversion}-six
 
-%description -n python3-%{srcname} %_description
+%description -n python%{python3_pkgversion}-%{srcname} %{_description}
 
 %prep
 %autosetup -n %{srcname}-%{version}
@@ -51,12 +43,17 @@ BuildRequires:  python3dist(six)
 %check
 %{python3} setup.py test
 
-%files -n python3-%{srcname}
+%files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE
 %doc README.rst
 %{python3_sitelib}/%{srcname}*.egg-info/
 %{python3_sitelib}/%{srcname}/
 
 %changelog
+* Sat Jul 17 2021 Andreas Maier <andreas.r.maier@gmx.de> 1.0.4-1
+- Bumped version to 1.0.4
+- Removed duplicate BuildRequires statements
+- Changed Python package references to use python3_pkgversion
+
 * Thu Sep 17 2020 Andreas Maier <andreas.r.maier@gmx.de> 1.0.2-1
-- Initial packaging
+- Initial packaging for package review
