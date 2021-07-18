@@ -19,6 +19,9 @@ Released: not yet
 * Mitigated the coveralls HTTP status 422 by pinning coveralls-python to
   <3.0.0 (issue #55).
 
+* Fixed a dependency error that caused importlib-metadata to be installed on
+  Python 3.8, while it is included in the Python base.
+
 **Enhancements:**
 
 **Cleanup:**
