@@ -85,7 +85,7 @@ TESTCASES_NOCASELIST_INIT = [
         "Empty list from no args",
         dict(
             init_args=(),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=[],
             verify_order=True,
         ),
@@ -94,8 +94,8 @@ TESTCASES_NOCASELIST_INIT = [
     (
         "Empty list from empty list as positional arg",
         dict(
-            init_args=(list(),),
-            init_kwargs=dict(),
+            init_args=([],),
+            init_kwargs={},
             exp_list=[],
             verify_order=True,
         ),
@@ -105,7 +105,7 @@ TESTCASES_NOCASELIST_INIT = [
         "Empty list from empty tuple as positional arg",
         dict(
             init_args=(tuple(),),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=[],
             verify_order=True,
         ),
@@ -114,8 +114,8 @@ TESTCASES_NOCASELIST_INIT = [
     (
         "Empty list from empty dict as positional arg",
         dict(
-            init_args=(dict(),),
-            init_kwargs=dict(),
+            init_args=({},),
+            init_kwargs={},
             exp_list=[],
             verify_order=True,
         ),
@@ -125,7 +125,7 @@ TESTCASES_NOCASELIST_INIT = [
         "Empty list from empty NocaseList as positional arg",
         dict(
             init_args=(NocaseList(),),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=[],
             verify_order=True,
         ),
@@ -137,7 +137,7 @@ TESTCASES_NOCASELIST_INIT = [
         "List from list as positional arg",
         dict(
             init_args=(['Dog', 'Cat'],),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=['Dog', 'Cat'],
             verify_order=True,
         ),
@@ -147,7 +147,7 @@ TESTCASES_NOCASELIST_INIT = [
         "List from tuple as positional arg",
         dict(
             init_args=(('Dog', 'Cat'),),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=['Dog', 'Cat'],
             verify_order=True,
         ),
@@ -157,7 +157,7 @@ TESTCASES_NOCASELIST_INIT = [
         "List from dict as positional arg (uses only the keys)",
         dict(
             init_args=({'Dog': 'Kitten', 'Cat': 'Budgie'},),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=['Dog', 'Cat'],
             verify_order=DICT_PRESERVES_ORDER,
         ),
@@ -167,7 +167,7 @@ TESTCASES_NOCASELIST_INIT = [
         "List from string as positional arg (string chars become list items)",
         dict(
             init_args=('Dog',),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=['D', 'o', 'g'],
             verify_order=True,
         ),
@@ -190,7 +190,7 @@ TESTCASES_NOCASELIST_INIT = [
         "None as positional arg (is not iterable)",
         dict(
             init_args=(None,),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=None,
             verify_order=None,
         ),
@@ -200,7 +200,7 @@ TESTCASES_NOCASELIST_INIT = [
         "Integer type as positional arg",
         dict(
             init_args=(42,),
-            init_kwargs=dict(),
+            init_kwargs={},
             exp_list=None,
             verify_order=None,
         ),
@@ -209,8 +209,8 @@ TESTCASES_NOCASELIST_INIT = [
     (
         "Two positional args",
         dict(
-            init_args=(list(), list()),
-            init_kwargs=dict(),
+            init_args=([], []),
+            init_kwargs={},
             exp_list=None,
             verify_order=None,
         ),
@@ -1435,7 +1435,7 @@ TESTCASES_NOCASELIST_COMPARE = [
         "Empty lists (list)",
         dict(
             obj1=NocaseList(),
-            obj2=list(),
+            obj2=[],
             exp_eq=True,
             exp_gt=False,
             exp_lt=False,
@@ -2617,7 +2617,7 @@ TESTCASES_NOCASELIST_SORT = [
         "Empty list, default sort",
         dict(
             nclist=NocaseList(),
-            kwargs=dict(),
+            kwargs={},
             exp_nclist=NocaseList(),
         ),
         None, None, True
@@ -2628,7 +2628,7 @@ TESTCASES_NOCASELIST_SORT = [
         "List with two items, case-insensitively unsorted, default sort key",
         dict(
             nclist=NocaseList(['Dog', 'cat']),
-            kwargs=dict(),
+            kwargs={},
             exp_nclist=['Dog', 'cat'] if TEST_AGAINST_LIST \
             else NocaseList(['cat', 'Dog']),
         ),
