@@ -25,7 +25,7 @@ def _lc_list(lst):
     """
     Return a lower-cased list from the input list.
     """
-    result = list()
+    result = []
     for value in lst:
         result.append(value.lower())
     return result
