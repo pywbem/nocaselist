@@ -32,6 +32,9 @@ Released: not yet
 
 **Enhancements:**
 
+* Enhanced test matrix on GitHub Actions to always include Python 2.7 and
+  Python 3.4 on Ubuntu and Windows, and Python 2.7 and Python 3.5 on macOS.
+
 **Cleanup:**
 
 * Removed old tools that were needed on Travis and Appveyor but no longer on
