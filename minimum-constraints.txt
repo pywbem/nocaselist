@@ -110,7 +110,7 @@ pytest==4.4.0; python_version >= '3.7'
 # Install test direct dependencies:
 
 # virtualenv
-virtualenv==14.0.0; python_version < '3.5'
+virtualenv==16.1.0; python_version < '3.5'
 virtualenv==16.1.0; python_version >= '3.5' and python_version < '3.8'
 virtualenv==20.0.0; python_version >= '3.8'  # requires six<2,>=1.12.0
 
@@ -212,6 +212,7 @@ colorama==0.4.0; python_version >= '3.5'
 
 alabaster==0.7.9
 appdirs==1.4.4; python_version >= '3.4'
+args==0.1.0
 atomicwrites==1.2.1; python_version == '2.7'
 attrs==18.2.0
 Babel==2.3.4
@@ -222,7 +223,9 @@ chardet==3.0.3
 Click==7.0
 clint==0.5.1; python_version == '2.7'
 configparser==4.0.2; python_version < '3.2'
+contextlib2==0.6.0
 distlib==0.3.0; python_version >= '3.4'
+docopt==0.6.1
 enum34==1.1.6; python_version < '3.4'
 filelock==3.0.0; python_version >= '3.4'
 funcsigs==1.0.2; python_version == '2.7'
@@ -241,6 +244,7 @@ MarkupSafe==0.23
 more-itertools==5.0.0
 pkginfo==1.4.1
 py==1.5.1
+pyparsing==2.4.7
 python-dateutil==2.6.0; python_version >= '3.4'
 pyzmq==16.0.4; python_version >= '3.4'
 requests==2.20.1
@@ -262,3 +266,4 @@ typing==3.6.1; python_version < '3.5'
 urllib3==1.23
 wcwidth==0.1.7
 webencodings==0.5.1
+zipp==1.2.0

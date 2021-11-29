@@ -125,11 +125,14 @@ colorama>=0.4.0; python_version >= '3.5'
 # Additional indirect dependencies are not specified in this file:
 
 # alabaster
+# args
 # babel
 # bleach
 # certifi
 # chardet
 # Click
+# contextlib2
+# docopt
 # gitdb
 # idna
 # imagesize
@@ -139,6 +142,7 @@ colorama>=0.4.0; python_version >= '3.5'
 # lazy-object-proxy
 # MarkupSafe
 # pkginfo
+# pyparsing
 # requests
 # requests-toolbelt
 # rfc3986
@@ -154,3 +158,4 @@ colorama>=0.4.0; python_version >= '3.5'
 # tqdm
 # urllib3
 # webencodings
+# zipp
