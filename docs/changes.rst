@@ -5,14 +5,10 @@ Change log
 ==========
 
 
-nocaselist 1.0.5.dev1
----------------------
+nocaselist 1.0.5
+----------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2022-03-27
 
 **Bug fixes:**
 
@@ -49,12 +45,6 @@ Released: not yet
 
 * Removed old tools that were needed on Travis and Appveyor but no longer on
   GitHub Actions: remove_duplicate_setuptools.py, retry.bat
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 1.0.4
