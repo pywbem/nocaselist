@@ -47,6 +47,14 @@ methods added in Python 3.3 to the built-in ``list`` class.
 .. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
 .. _NocaseList: https://nocaselist.readthedocs.io/en/stable/reference.html#nocaselist.NocaseList
 
+The case-insensitivity is achieved by matching any list values as their
+casefolded values. By default, the casefolding is performed with
+`str.casefold()`_ on Python 3 and with `str.lower()`_ on Python 2.
+The default casefolding can be overridden with a user-defined casefold method.
+
+.. _str.casefold(): https://docs.python.org/3/library/stdtypes.html#str.casefold
+.. _str.lower(): https://docs.python.org/2/library/stdtypes.html#str.lower
+
 Installation
 ------------
 

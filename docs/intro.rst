@@ -34,6 +34,53 @@ for being case-insensitive, of course). This includes the ``clear()`` and
 
 .. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
 
+The case-insensitivity is achieved by matching any key values as their
+casefolded values. By default, the casefolding is performed with
+:meth:`py:str.casefold` on Python 3 and with :meth:`py2:str.lower` on Python 2.
+The default casefolding can be overridden with a user-defined casefold method.
+
+
+.. _`Overriding the default casefold method`:
+
+Overriding the default casefold method
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The case-insensitive behavior of the :class:`~nocaselist.NocaseList` class
+is implemented in its :meth:`~nocaselist.NocaseList.__casefold__` method. That
+method returns the casefolded value for the case-insensitive list items.
+
+The default implementation of the :meth:`~nocaselist.NocaseList.__casefold__`
+method calls :meth:`py:str.casefold` on Python 3 and :meth:`py2:str.lower` on
+Python 2. The :meth:`py:str.casefold` method implements the casefolding
+algorithm described in :term:`Default Case Folding in The Unicode Standard`.
+
+If it is necessary to change the case-insensitive behavior of the
+:class:`~nocaselist.NocaseList` class, that can be done by overriding its
+:meth:`~nocaselist.NocaseList.__casefold__` method.
+
+The following Python 3 example shows how your own casefold method would
+be used, that normalizes the value in addition to casefolding it:
+
+
+.. code-block:: python
+
+    from NocaseList import NocaseList
+    from unicodedata import normalize
+
+    class MyNocaseList(NocaseList):
+
+        @staticmethod
+        def __casefold__(value):
+            return normalize('NFKD', value).casefold()
+
+    mylist = MyNocaseList()
+
+    # Add item with combined Unicode character "LATIN CAPITAL LETTER C WITH CEDILLA"
+    mylist.append("\u00C7")
+
+    # Look up item with combination sequence of lower case "c" followed by "COMBINING CEDILLA"
+    "c\u0327" in mylist  # True
+
 
 .. _`Supported environments`:
 

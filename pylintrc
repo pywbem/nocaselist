@@ -191,6 +191,7 @@ disable=I0011,
         locally-enabled, superfluous-parens, useless-object-inheritance,
         consider-using-set-comprehension, unnecessary-pass, useless-return,
         bad-option-value, super-with-arguments, consider-using-f-string,
+        redundant-u-string-prefix,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
