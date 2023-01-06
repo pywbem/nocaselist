@@ -6,6 +6,7 @@ from __future__ import print_function, absolute_import
 
 import sys
 import os
+import six
 
 __all__ = ['NocaseList']
 
@@ -21,16 +22,6 @@ else:
 BUILDING_DOCS = os.environ.get('BUILDING_DOCS', False)
 
 
-def _lc_list(lst):
-    """
-    Return a lower-cased list from the input list.
-    """
-    result = []
-    for value in lst:
-        result.append(value.lower())
-    return result
-
-
 class NocaseList(list):
     # pylint: disable=line-too-long
     """
@@ -38,10 +29,9 @@ class NocaseList(list):
 
     The list is case-insensitive: Whenever items of the list are looked up by
     value or item values are compared, that is done case-insensitively. The
-    case-insensitivity is defined by performing the lookup or comparison on
-    the result of the ``lower()`` method on list items. Therefore, list items
-    must support the ``lower()`` method. If a list item does not do that,
-    :exc:`py:AttributeError` is raised.
+    case-insensitivity is defined by performing the lookup or comparison on the
+    result of the :meth:`__casefold__` method on the on list items.
+    `None` is allowed as a list value and will not be case folded.
 
     The list is case-preserving: Whenever the value of list items is returned,
     they have the lexical case that was originally specified when adding
@@ -51,7 +41,7 @@ class NocaseList(list):
     in fact derived from, the built-in :class:`py:list` class in order to
     facilitate type checks.
 
-    The implementation maintains a second list with the lower-cased items of
+    The implementation maintains a second list with the casefolded items of
     the inherited list, and ensures that both lists are in sync.
 
     The list supports serialization via the Python :mod:`py:pickle` module.
@@ -82,27 +72,76 @@ class NocaseList(list):
         """
         super(NocaseList, self).__init__(iterable)
 
-        # The _lc_list attribute is a list with the same items as the original
-        # (inherited) list, except they are in lower case.
+        # The _casefolded_list attribute is a list with the same items as the
+        # original (inherited) list, except they are casefolded using the
+        # __casefold__() method.
 
         # The following is an optimization based on the assumption that in
-        # many cases, lower-casing the input list is more expensive than
+        # many cases, casefolding the input list is more expensive than
         # copying it (plus the overhead to check that).
         if isinstance(iterable, NocaseList):
             try:
                 # pylint: disable=protected-access
-                self._lc_list = iterable._lc_list.copy()
+                self._casefolded_list = iterable._casefolded_list.copy()
             except AttributeError:  # No copy() on Python 2
-                self._lc_list = _lc_list(self)
+                self._casefolded_list = self._new_casefolded_list(self)
         else:
-            self._lc_list = _lc_list(self)
+            self._casefolded_list = self._new_casefolded_list(self)
+
+    def _new_casefolded_list(self, lst):
+        """
+        Return a casefolded list from the input list.
+        """
+        result = []
+        for value in lst:
+            result.append(self._casefolded_value(value))
+        return result
+
+    def _casefolded_value(self, value):
+        """
+        This method returns the casefolded value and handles the case of value
+        being `None`.
+        """
+        if value is None:
+            return None
+        return self.__casefold__(value)
+
+    @staticmethod
+    def __casefold__(value):
+        """
+        This method implements the case-insensitive behavior of the class.
+
+        It returns a case-insensitive form of the input value by calling a
+        "casefold method" on the value. The input value will not be `None`.
+
+        The casefold method called by this method is :meth:`py:str.casefold`
+        on Python 3 and :meth:`py2:str.lower` on Python 2.
+
+        This method can be overridden by users in order to change the
+        case-insensitive behavior of the class.
+        See :ref:`Overriding the default casefold method` for details.
+
+        Parameters:
+          value (str or unicode): Input value, as a unicode string or in
+            Python 2 also as a byte string. Will not be `None`.
+
+        Returns:
+          str or unicode: Case-insensitive form of the input value, as a
+          unicode string or in Python 2 also as a byte string.
+
+        Raises:
+          AttributeError: The value does not have the casefold method.
+        """
+        if six.PY2:
+            return value.lower()
+        return value.casefold()
 
     def __getstate__(self):
         """
         Called when pickling the object, see :meth:`py:object.__getstate__`.
 
         In order to save space and time, only the list with the originally
-        cased items is saved, but not the second list with the lower cased
+        cased items is saved, but not the second list with the casefolded
         items.
 
         On Python 2, the 'pickle' module does not call :meth:`__setstate__`,
@@ -111,7 +150,7 @@ class NocaseList(list):
         # This copies the state of the inherited list even though it is
         # not visible in self.__dict__.
         state = self.__dict__.copy()
-        del state['_lc_list']
+        del state['_casefolded_list']
         return state
 
     def __setstate__(self, state):
@@ -122,7 +161,7 @@ class NocaseList(list):
         optimzation has only be implemented for Python 3.
         """
         self.__dict__.update(state)
-        self._lc_list = _lc_list(self)
+        self._casefolded_list = self._new_casefolded_list(self)
 
     def __setitem__(self, index, value):
         """
@@ -131,10 +170,10 @@ class NocaseList(list):
         Invoked using ``ncl[index] = value``.
 
         Raises:
-          AttributeError: The value does not have a ``lower()`` method.
+          AttributeError: The value does not have the casefold method.
         """
         super(NocaseList, self).__setitem__(index, value)
-        self._lc_list[index] = value.lower()
+        self._casefolded_list[index] = self._casefolded_value(value)
 
     def __delitem__(self, index):
         """
@@ -143,7 +182,7 @@ class NocaseList(list):
         Invoked using ``del ncl[index]``.
         """
         super(NocaseList, self).__delitem__(index)
-        del self._lc_list[index]
+        del self._casefolded_list[index]
 
     def __contains__(self, value):
         """
@@ -153,9 +192,9 @@ class NocaseList(list):
         Invoked using ``value in ncl``.
 
         Raises:
-          AttributeError: The value does not have a ``lower()`` method.
+          AttributeError: The value does not have the casefold method.
         """
-        return value.lower() in self._lc_list
+        return self._casefolded_value(value) in self._casefolded_list
 
     def __add__(self, other):
         """
@@ -250,7 +289,7 @@ class NocaseList(list):
                 format(t=type(number)))
         if number <= 0:
             del self[:]
-            del self._lc_list[:]
+            del self._casefolded_list[:]
         else:
             self_items = list(self)
             for _ in range(0, number - 1):
@@ -278,14 +317,14 @@ class NocaseList(list):
         Invoked using e.g. ``ncl == other``.
 
         Raises:
-          AttributeError: A value in the other list does not have a ``lower()``
+          AttributeError: A value in the other list does not have the casefold
             method.
         """
         if isinstance(other, NocaseList):
-            other = other._lc_list  # pylint: disable=protected-access
+            other = other._casefolded_list  # pylint: disable=protected-access
         else:
-            other = _lc_list(other)
-        return self._lc_list == other
+            other = self._new_casefolded_list(other)
+        return self._casefolded_list == other
 
     def __ne__(self, other):
         """
@@ -298,14 +337,14 @@ class NocaseList(list):
         Invoked using e.g. ``ncl != other``.
 
         Raises:
-          AttributeError: A value in the other list does not have a ``lower()``
+          AttributeError: A value in the other list does not have the casefold
             method.
         """
         if isinstance(other, NocaseList):
-            other = other._lc_list  # pylint: disable=protected-access
+            other = other._casefolded_list  # pylint: disable=protected-access
         else:
-            other = _lc_list(other)
-        return self._lc_list != other
+            other = self._new_casefolded_list(other)
+        return self._casefolded_list != other
 
     def __gt__(self, other):
         """
@@ -318,14 +357,14 @@ class NocaseList(list):
         Invoked using e.g. ``ncl > other``.
 
         Raises:
-          AttributeError: A value in the other list does not have a ``lower()``
+          AttributeError: A value in the other list does not have the casefold
             method.
         """
         if isinstance(other, NocaseList):
-            other = other._lc_list  # pylint: disable=protected-access
+            other = other._casefolded_list  # pylint: disable=protected-access
         else:
-            other = _lc_list(other)
-        return self._lc_list > other
+            other = self._new_casefolded_list(other)
+        return self._casefolded_list > other
 
     def __lt__(self, other):
         """
@@ -338,14 +377,14 @@ class NocaseList(list):
         Invoked using e.g. ``ncl < other``.
 
         Raises:
-          AttributeError: A value in the other list does not have a ``lower()``
+          AttributeError: A value in the other list does not have the casefold
             method.
         """
         if isinstance(other, NocaseList):
-            other = other._lc_list  # pylint: disable=protected-access
+            other = other._casefolded_list  # pylint: disable=protected-access
         else:
-            other = _lc_list(other)
-        return self._lc_list < other
+            other = self._new_casefolded_list(other)
+        return self._casefolded_list < other
 
     def __ge__(self, other):
         """
@@ -359,14 +398,14 @@ class NocaseList(list):
         Invoked using e.g. ``ncl >= other``.
 
         Raises:
-          AttributeError: A value in the other list does not have a ``lower()``
+          AttributeError: A value in the other list does not have the casefold
             method.
         """
         if isinstance(other, NocaseList):
-            other = other._lc_list  # pylint: disable=protected-access
+            other = other._casefolded_list  # pylint: disable=protected-access
         else:
-            other = _lc_list(other)
-        return self._lc_list >= other
+            other = self._new_casefolded_list(other)
+        return self._casefolded_list >= other
 
     def __le__(self, other):
         """
@@ -380,14 +419,14 @@ class NocaseList(list):
         Invoked using e.g. ``ncl <= other``.
 
         Raises:
-          AttributeError: A value in the other list does not have a ``lower()``
+          AttributeError: A value in the other list does not have the casefold
             method.
         """
         if isinstance(other, NocaseList):
-            other = other._lc_list  # pylint: disable=protected-access
+            other = other._casefolded_list  # pylint: disable=protected-access
         else:
-            other = _lc_list(other)
-        return self._lc_list <= other
+            other = self._new_casefolded_list(other)
+        return self._casefolded_list <= other
 
     def count(self, value):
         """
@@ -395,9 +434,9 @@ class NocaseList(list):
         comparing the value and the list items case-insensitively.
 
         Raises:
-          AttributeError: The value does not have a ``lower()`` method.
+          AttributeError: The value does not have the casefold method.
         """
-        return self._lc_list.count(value.lower())
+        return self._casefolded_list.count(self._casefolded_value(value))
 
     def copy(self):
         """
@@ -417,10 +456,10 @@ class NocaseList(list):
         """
         try:
             super(NocaseList, self).clear()
-            self._lc_list.clear()
+            self._casefolded_list.clear()
         except AttributeError:
             del self[:]
-            del self._lc_list[:]
+            del self._casefolded_list[:]
 
     def index(self, value, start=0, stop=9223372036854775807):
         """
@@ -432,10 +471,11 @@ class NocaseList(list):
         of the first item after the search range.
 
         Raises:
-          AttributeError: The value does not have a ``lower()`` method.
+          AttributeError: The value does not have the casefold method.
           ValueError: No such item is found.
         """
-        return self._lc_list.index(value.lower(), start, stop)
+        return self._casefolded_list.index(
+            self._casefolded_value(value), start, stop)
 
     def append(self, value):
         """
@@ -443,10 +483,10 @@ class NocaseList(list):
         (and return None).
 
         Raises:
-          AttributeError: The value does not have a ``lower()`` method.
+          AttributeError: The value does not have the casefold method.
         """
         super(NocaseList, self).append(value)
-        self._lc_list.append(value.lower())
+        self._casefolded_list.append(self._casefolded_value(value))
 
     def extend(self, iterable):
         """
@@ -454,7 +494,7 @@ class NocaseList(list):
         (and return None).
 
         Raises:
-          AttributeError: A value in the iterable does not have a ``lower()``
+          AttributeError: A value in the iterable does not have the casefold
             method.
         """
         super(NocaseList, self).extend(iterable)
@@ -463,9 +503,9 @@ class NocaseList(list):
         # been created with __new__() without calling __init__().
         try:
             for value in iterable:
-                self._lc_list.append(value.lower())
+                self._casefolded_list.append(self._casefolded_value(value))
         except AttributeError:
-            self._lc_list = _lc_list(self)
+            self._casefolded_list = self._new_casefolded_list(self)
 
     def insert(self, index, value):
         """
@@ -473,17 +513,17 @@ class NocaseList(list):
         index (and return None).
 
         Raises:
-          AttributeError: The value does not have a ``lower()`` method.
+          AttributeError: The value does not have the casefold method.
         """
         super(NocaseList, self).insert(index, value)
-        self._lc_list.insert(index, value.lower())
+        self._casefolded_list.insert(index, self._casefolded_value(value))
 
     def pop(self, index=-1):
         """
         Return the value of the item at the specified index and also remove it
         from the list.
         """
-        self._lc_list.pop(index)
+        self._casefolded_list.pop(index)
         return super(NocaseList, self).pop(index)
 
     def remove(self, value):
@@ -493,9 +533,9 @@ class NocaseList(list):
         items case-insensitively.
 
         Raises:
-          AttributeError: The value does not have a ``lower()`` method.
+          AttributeError: The value does not have the casefold method.
         """
-        self._lc_list.remove(value.lower())
+        self._casefolded_list.remove(self._casefolded_value(value))
         super(NocaseList, self).remove(value)
 
     def reverse(self):
@@ -503,7 +543,7 @@ class NocaseList(list):
         Reverse the items in the list in place (and return None).
         """
         super(NocaseList, self).reverse()
-        self._lc_list = _lc_list(self)
+        self._casefolded_list = self._new_casefolded_list(self)
 
     def sort(self, key=None, reverse=False):
         """
@@ -512,25 +552,25 @@ class NocaseList(list):
         The sort is stable, in that the order of two (case-insensitively) equal
         elements is maintained.
 
-        By default, the list is sorted in ascending order of its (lower-cased)
+        By default, the list is sorted in ascending order of its casefolded
         item values. If a key function is given, it is applied once to each
-        (lower-cased) list item and the list is sorted in ascending or
+        casefolded list item and the list is sorted in ascending or
         descending order of their key function values.
 
         The ``reverse`` flag can be set to sort in descending order.
         """
 
-        def lower_key(value):
+        def casefolded_key(value):
             """Key function used for sorting"""
-            # The function cannot raise AttributeError due to missing lower()
+            # The function cannot raise AttributeError due to missing casefold
             # method, because the list items have been verified for that when
             # adding them to the list.
             if key:
-                return key(value.lower())
-            return value.lower()
+                return key(self._casefolded_value(value))
+            return self._casefolded_value(value)
 
-        super(NocaseList, self).sort(key=lower_key, reverse=reverse)
-        self._lc_list = _lc_list(self)
+        super(NocaseList, self).sort(key=casefolded_key, reverse=reverse)
+        self._casefolded_list = self._new_casefolded_list(self)
 
 
 # Remove methods that should only be present in a particular Python version.

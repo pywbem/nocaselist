@@ -7,7 +7,9 @@ from __future__ import absolute_import
 import sys
 import os
 import re
+import unicodedata
 import pickle
+import six
 import pytest
 
 from ..utils.simplified_test_function import simplified_test_function
@@ -55,14 +57,14 @@ def assert_equal(list1, list2, verify_order=True):
     else:
         assert sorted(list1_lst) == sorted(list2_lst)
 
-    # Check consistency of list1 between its internal lower-cased list and
+    # Check consistency of list1 between its internal casefolded list and
     # its external list
     if isinstance(list1, _NocaseList):
-        list1_lc = list1._lc_list  # pylint: disable=protected-access
-        assert len(list1_lst) == len(list1_lc)
+        list1_cf = list1._casefolded_list  # pylint: disable=protected-access
+        assert len(list1_lst) == len(list1_cf)
         for i, value in enumerate(list1):  # Uses NocaseList.__iter__()
-            value_lc = list1_lc[i]
-            assert value.lower() == value_lc
+            value_cf = list1_cf[i]
+            assert list1.__casefold__(value) == value_cf
 
 
 TESTCASES_NOCASELIST_INIT = [
@@ -732,16 +734,16 @@ TESTCASES_NOCASELIST_CONTAINS = [
 
     # Empty NocaseList
     (
-        "Empty list, with None as value (no lower() method)",
+        "Empty list, with None as value (no casefold method)",
         dict(
             nclist=NocaseList(),
             value=None,
-            exp_result=False if TEST_AGAINST_LIST else None,
+            exp_result=False,
         ),
-        None if TEST_AGAINST_LIST else AttributeError, None, True
+        None, None, True
     ),
     (
-        "Empty list, with integer value 0 (no lower() method)",
+        "Empty list, with integer value 0 (no casefold method)",
         dict(
             nclist=NocaseList(),
             value=0,
@@ -770,16 +772,16 @@ TESTCASES_NOCASELIST_CONTAINS = [
 
     # Non-empty NocaseList
     (
-        "List with two items, with None as value (no lower() method)",
+        "List with two items, with None as value (no casefold method)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=None,
-            exp_result=False if TEST_AGAINST_LIST else None,
+            exp_result=False,
         ),
-        None if TEST_AGAINST_LIST else AttributeError, None, True
+        None, None, True
     ),
     (
-        "List with two items, with integer value 0 (no lower() method)",
+        "List with two items, with integer value 0 (no casefold method)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=0,
@@ -979,7 +981,7 @@ TESTCASES_NOCASELIST_ADD = [
     ),
     (
         "Add an empty NocaseList and a list with one integer item "
-        "(list: success, NocaseList: no lower)",
+        "(list: success, NocaseList: no casefold)",
         dict(
             nclist=NocaseList(),
             other=[42],
@@ -1084,7 +1086,7 @@ TESTCASES_NOCASELIST_IADD = [
     ),
     (
         "Extend an empty NocaseList by a list with one integer item "
-        "(list: success, NocaseList: no lower)",
+        "(list: success, NocaseList: no casefold)",
         dict(
             nclist=NocaseList(),
             other=[42],
@@ -1771,7 +1773,7 @@ TESTCASES_NOCASELIST_COUNT = [
 
     # Empty NocaseList
     (
-        "Empty list, with integer value (no lower())",
+        "Empty list, with integer value (no casefold)",
         dict(
             nclist=NocaseList(),
             value=1234,
@@ -1791,7 +1793,7 @@ TESTCASES_NOCASELIST_COUNT = [
 
     # Non-empty NocaseList
     (
-        "List with two items, with integer value (no lower())",
+        "List with two items, with integer value (no casefold)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=1234,
@@ -1984,7 +1986,7 @@ TESTCASES_NOCASELIST_INDEX = [
 
     # Empty NocaseList
     (
-        "Empty list, with integer value (no lower())",
+        "Empty list, with integer value (no casefold)",
         dict(
             nclist=NocaseList(),
             args=(1234,),
@@ -2004,7 +2006,7 @@ TESTCASES_NOCASELIST_INDEX = [
 
     # Non-empty NocaseList
     (
-        "List with two items, with integer value (no lower())",
+        "List with two items, with integer value (no casefold)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             args=(1234,),
@@ -2097,7 +2099,7 @@ TESTCASES_NOCASELIST_APPEND = [
 
     # Empty NocaseList
     (
-        "Empty list, with integer value (no lower())",
+        "Empty list, with integer value (no casefold)",
         dict(
             nclist=NocaseList(),
             value=1234,
@@ -2118,7 +2120,7 @@ TESTCASES_NOCASELIST_APPEND = [
 
     # Non-empty NocaseList
     (
-        "List with two items, with integer value (no lower())",
+        "List with two items, with integer value (no casefold)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=1234,
@@ -2197,7 +2199,7 @@ TESTCASES_NOCASELIST_EXTEND = [
         None, None, True
     ),
     (
-        "Empty list, with integer value (no lower())",
+        "Empty list, with integer value (no casefold)",
         dict(
             nclist=NocaseList(),
             values=[1234],
@@ -2226,7 +2228,7 @@ TESTCASES_NOCASELIST_EXTEND = [
         None, None, True
     ),
     (
-        "List with two items, with integer value (no lower())",
+        "List with two items, with integer value (no casefold)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             values=[1234],
@@ -2295,7 +2297,7 @@ TESTCASES_NOCASELIST_INSERT = [
 
     # Empty NocaseList
     (
-        "Empty list, inserting integer value before index 0 (no lower())",
+        "Empty list, inserting integer value before index 0 (no casefold)",
         dict(
             nclist=NocaseList(),
             args=(0, 1234),
@@ -2334,7 +2336,7 @@ TESTCASES_NOCASELIST_INSERT = [
     # Non-empty NocaseList
     (
         "List with two items, inserting integer value before index 0 "
-        "(no lower())",
+        "(no casefold)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             args=(0, 1234),
@@ -2754,3 +2756,30 @@ def test_NocaseList_pickle(testcase, nclist):
     assert testcase.exp_exc_types is None
 
     assert_equal(nclist2, nclist)
+
+
+def test_casefold_override():
+    """
+    Test function for overriding the casefold method.
+    """
+
+    if TEST_AGAINST_LIST:
+        pytest.skip("The override test does not support testing with list")
+
+    if six.PY2:
+        pytest.skip("The override test does not support Python 2")
+
+    class MyNocaseList(NocaseList):
+        "Test class that overrides the casefold method"
+
+        @staticmethod
+        def __casefold__(value):
+            return unicodedata.normalize('NFKD', value).casefold()
+
+    nclist = MyNocaseList()
+
+    # Add item with combined Unicode character
+    nclist.append("\u00C7")
+
+    # Look up item with combination sequence
+    assert "c\u0327" in nclist
