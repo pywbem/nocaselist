@@ -4,6 +4,9 @@
 API Reference
 =============
 
+This section describes the external API of the nocaselist project. Any
+internal symbols and APIs are omitted.
+
 
 .. _`Class NocaseList`:
 
