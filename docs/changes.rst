@@ -5,10 +5,10 @@ Change log
 ==========
 
 
-nocaselist 1.1.0.dev1
----------------------
+nocaselist 1.1.0
+----------------
 
-Released: not yet
+Released: 2023-01-21
 
 **Incompatible changes:**
 
@@ -18,10 +18,6 @@ Released: not yet
   negatively affected by this change, you can go back to the `str.lower()`
   method by overriding the `NocaseDict.__casefold__()` method with a method
   that calls `str.lower()`. (issue #95)
-
-**Deprecations:**
-
-**Bug fixes:**
 
 **Enhancements:**
 
@@ -34,14 +30,6 @@ Released: not yet
 * Added support for storing `None` as a value in a NocaseList. Previously, that
   was rejected with `AttributeError` since the casefold method was attempted to
   be called on the `None` value. (part of issue #95)
-
-**Cleanup:**
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 1.0.6
