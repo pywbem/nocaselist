@@ -9,7 +9,6 @@ import os
 import re
 import unicodedata
 import pickle
-import six
 import pytest
 
 from ..utils.simplified_test_function import simplified_test_function
@@ -20,6 +19,8 @@ nocaselist = import_installed('nocaselist')
 from nocaselist import NocaseList as _NocaseList  # noqa: E402
 # pylint: enable=wrong-import-position, wrong-import-order, invalid-name
 
+# pylint: disable=use-dict-literal
+
 # Controls whether the tests are run against a standard dict instead.
 TEST_AGAINST_LIST = bool(os.getenv('TEST_AGAINST_LIST'))
 
@@ -27,10 +28,10 @@ if TEST_AGAINST_LIST:
     print("\nInfo: test_nocaselist.py tests run against standard list")
 
 # Indicates that the list to be tested has a copy() method
-LIST_HAS_COPY = not TEST_AGAINST_LIST or sys.version_info[0] == 3
+LIST_HAS_COPY = True
 
 # Indicates that the list to be tested has a clear() method
-LIST_HAS_CLEAR = not TEST_AGAINST_LIST or sys.version_info[0] == 3
+LIST_HAS_CLEAR = True
 
 # The list class being tested
 # pylint: disable=invalid-name
@@ -2765,9 +2766,6 @@ def test_casefold_override():
 
     if TEST_AGAINST_LIST:
         pytest.skip("The override test does not support testing with list")
-
-    if six.PY2:
-        pytest.skip("The override test does not support Python 2")
 
     class MyNocaseList(NocaseList):
         "Test class that overrides the casefold method"
