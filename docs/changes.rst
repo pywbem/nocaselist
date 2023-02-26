@@ -21,11 +21,24 @@ Released: not yet
 
 * Fixed coveralls issues with KeyError and HTTP 422 Unprocessable Entity.
 
+* Added support for passing slices to '__setitem__()' and '__delitem__()'.
+  Expanded the testcases accordingly.
+
+* Fixed incorrect error handling when passing objects of unsupported types to
+  the right hand operand of the rich comparison methods of NocaseList. This
+  previously caused AttributeError "'list' object has no attribute 'lower'"
+  and TypeError "'int' object is not iterable" to be raised which was confusing.
+  This is now handled by returning 'NotImplemented' from these methods as
+  recommended by Python, causing TypeError with a proper message to be raised
+  by Python.
+
 **Enhancements:**
 
 * Resurrected support for byte strings as list values in the default
   implementation of the casefold method. The list can now contains unicode
   strings and byte strings.
+
+* Added type hints and type checking with MyPy (issue #96).
 
 **Cleanup:**
 
