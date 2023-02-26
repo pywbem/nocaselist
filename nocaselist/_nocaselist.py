@@ -6,7 +6,6 @@ from __future__ import print_function, absolute_import
 
 import sys
 import os
-import six
 
 __all__ = ['NocaseList']
 
@@ -114,27 +113,28 @@ class NocaseList(list):
         It returns a case-insensitive form of the input value by calling a
         "casefold method" on the value. The input value will not be `None`.
 
-        The casefold method called by this method is :meth:`py:str.casefold`
-        on Python 3 and :meth:`py2:str.lower` on Python 2.
+        The casefold method called by this method is :meth:`py2:str.lower` on
+        Python 2, and on Python 3 it is :meth:`py:str.casefold`, falling back
+        to :meth:`py:bytes.lower` if it does not exist.
 
         This method can be overridden by users in order to change the
         case-insensitive behavior of the class.
         See :ref:`Overriding the default casefold method` for details.
 
         Parameters:
-          value (str or unicode): Input value, as a unicode string or in
-            Python 2 also as a byte string. Will not be `None`.
+          value (str or unicode or bytes): Input value. Will not be `None`.
 
         Returns:
-          str or unicode: Case-insensitive form of the input value, as a
-          unicode string or in Python 2 also as a byte string.
+          str or unicode or bytes: Case-insensitive form of the input value.
 
         Raises:
           AttributeError: The value does not have the casefold method.
         """
-        if six.PY2:
+        try:
+            return value.casefold()
+        except AttributeError:
+            # Either Python 2, or Python 3 and a byte string key
             return value.lower()
-        return value.casefold()
 
     def __getstate__(self):
         """

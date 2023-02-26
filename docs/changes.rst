@@ -20,6 +20,10 @@ Released: not yet
 
 **Enhancements:**
 
+* Resurrected support for byte strings as list values in the default
+  implementation of the casefold method. The list can now contains unicode
+  strings and byte strings.
+
 **Cleanup:**
 
 **Known issues:**
