@@ -5,14 +5,10 @@ Change log
 ==========
 
 
-nocaselist 1.1.1.dev1
----------------------
+nocaselist 1.1.1
+----------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2023-02-26
 
 **Bug fixes:**
 
@@ -23,14 +19,6 @@ Released: not yet
 * Resurrected support for byte strings as list values in the default
   implementation of the casefold method. The list can now contains unicode
   strings and byte strings.
-
-**Cleanup:**
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 1.1.0
