@@ -2,19 +2,9 @@
 This module provides class NocaseList.
 """
 
-from __future__ import print_function, absolute_import
-
-import sys
 import os
-import six
 
 __all__ = ['NocaseList']
-
-if sys.version_info[0] == 2:
-    # pylint: disable=undefined-variable
-    _INTEGER_TYPES = (long, int)  # noqa: F821
-else:
-    _INTEGER_TYPES = (int,)
 
 # This env var is set when building the docs. It causes the methods
 # that are supposed to exist only in a particular Python version, not to be
@@ -23,7 +13,6 @@ BUILDING_DOCS = os.environ.get('BUILDING_DOCS', False)
 
 
 class NocaseList(list):
-    # pylint: disable=line-too-long
     """
     A case-insensitive and case-preserving list.
 
@@ -46,8 +35,7 @@ class NocaseList(list):
 
     The list supports serialization via the Python :mod:`py:pickle` module.
     To save space and time, only the originally cased list is serialized.
-    """  # noqa E401
-    # pylint: enable=line-too-long
+    """
 
     # Methods not implemented:
     #
@@ -80,11 +68,8 @@ class NocaseList(list):
         # many cases, casefolding the input list is more expensive than
         # copying it (plus the overhead to check that).
         if isinstance(iterable, NocaseList):
-            try:
-                # pylint: disable=protected-access
-                self._casefolded_list = iterable._casefolded_list.copy()
-            except AttributeError:  # No copy() on Python 2
-                self._casefolded_list = self._new_casefolded_list(self)
+            # pylint: disable=protected-access
+            self._casefolded_list = iterable._casefolded_list.copy()
         else:
             self._casefolded_list = self._new_casefolded_list(self)
 
@@ -114,26 +99,21 @@ class NocaseList(list):
         It returns a case-insensitive form of the input value by calling a
         "casefold method" on the value. The input value will not be `None`.
 
-        The casefold method called by this method is :meth:`py:str.casefold`
-        on Python 3 and :meth:`py2:str.lower` on Python 2.
+        The casefold method called by this method is :meth:`py:str.casefold`.
 
         This method can be overridden by users in order to change the
         case-insensitive behavior of the class.
         See :ref:`Overriding the default casefold method` for details.
 
         Parameters:
-          value (str or unicode): Input value, as a unicode string or in
-            Python 2 also as a byte string. Will not be `None`.
+          value (str): Input value. Will not be `None`.
 
         Returns:
-          str or unicode: Case-insensitive form of the input value, as a
-          unicode string or in Python 2 also as a byte string.
+          str: Case-insensitive form of the input value.
 
         Raises:
           AttributeError: The value does not have the casefold method.
         """
-        if six.PY2:
-            return value.lower()
         return value.casefold()
 
     def __getstate__(self):
@@ -143,9 +123,6 @@ class NocaseList(list):
         In order to save space and time, only the list with the originally
         cased items is saved, but not the second list with the casefolded
         items.
-
-        On Python 2, the 'pickle' module does not call :meth:`__setstate__`,
-        so this optimzation has only be implemented for Python 3.
         """
         # This copies the state of the inherited list even though it is
         # not visible in self.__dict__.
@@ -156,9 +133,6 @@ class NocaseList(list):
     def __setstate__(self, state):
         """
         Called when unpickling the object, see :meth:`py:object.__setstate__`.
-
-        On Python 2, the 'pickle' module does not call this method, so this
-        optimzation has only be implemented for Python 3.
         """
         self.__dict__.update(state)
         self._casefolded_list = self._new_casefolded_list(self)
@@ -247,7 +221,7 @@ class NocaseList(list):
 
         Invoked using ``ncl * number``.
         """
-        if not isinstance(number, _INTEGER_TYPES):
+        if not isinstance(number, int):
             raise TypeError(
                 "Cannot multiply NocaseList by non-integer of type {t}".
                 format(t=type(number)))
@@ -283,7 +257,7 @@ class NocaseList(list):
         """
         # Note: It is unusual that the method has to return self, but it was
         # verified that this is necessary.
-        if not isinstance(number, _INTEGER_TYPES):
+        if not isinstance(number, int):
             raise TypeError(
                 "Cannot multiply NocaseList by non-integer of type {t}".
                 format(t=type(number)))
@@ -441,18 +415,12 @@ class NocaseList(list):
     def copy(self):
         """
         Return a shallow copy of the list.
-
-        Note: This method is supported on Python 2 and Python 3, even though
-        the built-in list class only supports it on Python 3.
         """
         return NocaseList(self)
 
     def clear(self):
         """
         Remove all items from the list (and return None).
-
-        Note: This method is supported on Python 2 and Python 3, even though
-        the built-in list class only supports it on Python 3.
         """
         try:
             super(NocaseList, self).clear()
@@ -571,11 +539,3 @@ class NocaseList(list):
 
         super(NocaseList, self).sort(key=casefolded_key, reverse=reverse)
         self._casefolded_list = self._new_casefolded_list(self)
-
-
-# Remove methods that should only be present in a particular Python version.
-# If the documentation is being built, the methods are not removed in order to
-# show them in the documentation.
-if sys.version_info[0] == 2 and not BUILDING_DOCS:
-    del NocaseList.__setstate__
-    del NocaseList.__getstate__
