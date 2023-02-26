@@ -20,6 +20,8 @@ nocaselist = import_installed('nocaselist')
 from nocaselist import NocaseList as _NocaseList  # noqa: E402
 # pylint: enable=wrong-import-position, wrong-import-order, invalid-name
 
+# pylint: disable=use-dict-literal
+
 # Controls whether the tests are run against a standard dict instead.
 TEST_AGAINST_LIST = bool(os.getenv('TEST_AGAINST_LIST'))
 
