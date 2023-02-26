@@ -100,21 +100,27 @@ class NocaseList(list):
         "casefold method" on the value. The input value will not be `None`.
 
         The casefold method called by this method is :meth:`py:str.casefold`.
+        If that method does not exist on the key value (e.g. because it is a
+        byte string), :meth:`py:bytes.lower` is called, for compatibility with
+        earlier versions of the package.
 
         This method can be overridden by users in order to change the
         case-insensitive behavior of the class.
         See :ref:`Overriding the default casefold method` for details.
 
         Parameters:
-          value (str): Input value. Will not be `None`.
+          value (str or bytes): Input value. Will not be `None`.
 
         Returns:
-          str: Case-insensitive form of the input value.
+          str or bytes: Case-insensitive form of the input value.
 
         Raises:
           AttributeError: The value does not have the casefold method.
         """
-        return value.casefold()
+        try:
+            return value.casefold()
+        except AttributeError:
+            return value.lower()
 
     def __getstate__(self):
         """
