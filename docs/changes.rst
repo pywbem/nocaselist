@@ -16,6 +16,8 @@ Released: not yet
 
 **Bug fixes:**
 
+* Docs: Fixed description of default casefold method for Python 2.
+
 **Enhancements:**
 
 **Cleanup:**

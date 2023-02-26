@@ -48,13 +48,18 @@ methods added in Python 3.3 to the built-in ``list`` class.
 .. _NocaseList: https://nocaselist.readthedocs.io/en/stable/reference.html#nocaselist.NocaseList
 
 The case-insensitivity is achieved by matching any key values as their
-casefolded values. By default, the casefolding is performed with
-`str.casefold()`_ for unicode string keys and with `bytes.lower()`_ for byte
-string keys.
+casefolded values. By default, the casefolding is performed as follows:
+
+* On Python 3, with `str.casefold()`_ for unicode string keys and with
+  `bytes.lower()`_ for byte string keys.
+
+* On Python 2, with `str.lower()`_.
+
 The default casefolding can be overridden with a user-defined casefold method.
 
 .. _str.casefold(): https://docs.python.org/3/library/stdtypes.html#str.casefold
 .. _bytes.lower(): https://docs.python.org/3/library/stdtypes.html#bytes.lower
+.. _str.lower(): https://docs.python.org/2/library/stdtypes.html#str.lower
 
 
 Installation
