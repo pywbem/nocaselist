@@ -35,12 +35,15 @@ for being case-insensitive, of course). This includes the ``clear()`` and
 .. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
 
 The case-insensitivity is achieved by matching any key values as their
-casefolded values. By default, the casefolding is performed with
-:meth:`py:str.casefold` for unicode string keys and with :meth:`py:bytes.lower`
-for byte string keys.
+casefolded values. By default, the casefolding is performed as follows:
 
-The :meth:`py:str.casefold` method implements the casefolding
-algorithm described in :term:`Default Case Folding in The Unicode Standard`.
+* On Python 3, with :meth:`py:str.casefold` for unicode string keys and with
+  :meth:`py:bytes.lower` for byte string keys.
+
+* On Python 2, with :meth:`py2:str.lower`.
+
+The :meth:`py:str.casefold` method implements the casefolding algorithm
+described in :term:`Default Case Folding in The Unicode Standard`.
 
 The default casefolding can be overridden with a user-defined casefold method.
 
