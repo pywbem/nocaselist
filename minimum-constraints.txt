@@ -9,8 +9,6 @@
 # For the base packages, we use the versions from Ubuntu 18.04 as a general
 # minimum, and then increase it to the first version that introduced support
 # for a particular Python version.
-# Pip 20.2 introduced a new resolver whose backtracking had issues that were resolved only in 21.2.2.
-# pip>=21.0 is needed for the cryptography package on Windows on GitHub Actions.
 pip==21.2.2
 setuptools==49.0.0
 wheel==0.33.5
@@ -18,10 +16,7 @@ wheel==0.33.5
 
 # Direct dependencies for installation (must be consistent with requirements.txt)
 
-# six (used by virtualenv, tox, probably others)
-# virtualenv 20.0 requires six>=1.12.0 on py>=3.8
-# tox 3.17 requires six>=1.14.0
-six==1.14.0
+typing-extensions==3.10
 
 
 # Indirect dependencies for installation (must be consistent with requirements.txt, if present)
@@ -34,14 +29,15 @@ six==1.14.0
 # Unit test direct dependencies (e.g. imports into testcases):
 
 # pytest
-# pytest 4.3.1 solves an issue on Python 3 with minimum package levels
-pytest==6.2.5
-
+pytest==7.0.0
 
 # Install test direct dependencies:
 
 # virtualenv
 virtualenv==20.1.0
+
+# six (used by virtualenv, tox, probably others)
+six==1.14.0
 
 
 # Indirect dependencies for test (must be consistent with test-requirements.txt, if present)
@@ -96,7 +92,6 @@ pylint==2.13.0; python_version <= '3.6'
 pylint==2.15.0; python_version >= '3.7'
 astroid==2.11.0; python_version <= '3.6'
 astroid==2.12.4; python_version >= '3.7'
-typing-extensions==3.10; python_version <= '3.10'
 typed-ast==1.4.0; python_version >= '3.6' and python_version <= '3.7' and implementation_name=='cpython'
 lazy-object-proxy==1.4.3
 wrapt==1.14

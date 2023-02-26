@@ -10,7 +10,7 @@ import re
 import unicodedata
 import pickle
 import pytest
-import six
+import six  # type: ignore
 
 from ..utils.simplified_test_function import simplified_test_function
 
@@ -27,12 +27,6 @@ TEST_AGAINST_LIST = bool(os.getenv('TEST_AGAINST_LIST'))
 
 if TEST_AGAINST_LIST:
     print("\nInfo: test_nocaselist.py tests run against standard list")
-
-# Indicates that the list to be tested has a copy() method
-LIST_HAS_COPY = True
-
-# Indicates that the list to be tested has a clear() method
-LIST_HAS_CLEAR = True
 
 # The list class being tested
 # pylint: disable=invalid-name
@@ -549,6 +543,26 @@ TESTCASES_NOCASELIST_SETITEM = [
         ),
         IndexError, None, True
     ),
+    (
+        "Updating string list at slice 0:2",
+        dict(
+            nclist=NocaseList(['A1', 'B2', 'C3', 'D4']),
+            index=slice(0, 2),
+            value=['XX', 'YY'],
+            exp_nclist=NocaseList(['XX', 'YY', 'C3', 'D4']),
+        ),
+        None, None, True
+    ),
+    (
+        "Updating string list at slice 0:2:2",
+        dict(
+            nclist=NocaseList(['A1', 'B2', 'C3', 'D4']),
+            index=slice(0, 4, 2),
+            value=['XX', 'YY'],
+            exp_nclist=NocaseList(['XX', 'B2', 'YY', 'D4']),
+        ),
+        None, None, True
+    ),
 ]
 
 
@@ -675,6 +689,24 @@ TESTCASES_NOCASELIST_DELITEM = [
             exp_nclist=None,
         ),
         IndexError, None, True
+    ),
+    (
+        "Deleting string list at slice 0:2",
+        dict(
+            nclist=NocaseList(['A1', 'B2', 'C3', 'D4']),
+            index=slice(0, 2),
+            exp_nclist=NocaseList(['C3', 'D4']),
+        ),
+        None, None, True
+    ),
+    (
+        "Deleting string list at slice 0:2:2",
+        dict(
+            nclist=NocaseList(['A1', 'B2', 'C3', 'D4']),
+            index=slice(0, 4, 2),
+            exp_nclist=NocaseList(['B2', 'D4']),
+        ),
+        None, None, True
     ),
 ]
 
@@ -1727,10 +1759,65 @@ TESTCASES_NOCASELIST_COMPARE = [
     ),
 ]
 
+TESTCASES_NOCASELIST_EQUAL = [
+
+    # Testcases for NocaseList.__eq__(), __ne__()
+    (
+        "List compared with integer (valid and False)",
+        dict(
+            obj1=NocaseList(['Cat', 'Dog']),
+            obj2=42,
+            exp_eq=False,
+            exp_gt=None,  # not used
+            exp_lt=None,  # not used
+        ),
+        None, None, True
+    ),
+    (
+        "Integer compared with list (valid and False)",
+        dict(
+            obj1=42,
+            obj2=NocaseList(['Cat', 'Dog']),
+            exp_eq=False,
+            exp_gt=None,  # not used
+            exp_lt=None,  # not used
+        ),
+        None, None, True
+    ),
+]
+
+TESTCASES_NOCASELIST_ORDER = [
+
+    # Testcases for NocaseList.__gt__(), __le__()
+    # Testcases for NocaseList.__lt__(), __ge__()
+    (
+        "List compared with integer (invalid)",
+        dict(
+            obj1=NocaseList(['Cat', 'Dog']),
+            obj2=42,
+            exp_eq=None,  # not used
+            exp_gt=None,
+            exp_lt=None,
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Integer compared with list (invalid)",
+        dict(
+            obj1=42,
+            obj2=NocaseList(['Cat', 'Dog']),
+            exp_eq=None,  # not used
+            exp_gt=None,
+            exp_lt=None,
+        ),
+        TypeError, None, True
+    ),
+]
+
 
 @pytest.mark.parametrize(
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
-    TESTCASES_NOCASELIST_COMPARE)
+    TESTCASES_NOCASELIST_COMPARE + TESTCASES_NOCASELIST_EQUAL)  # type: ignore
 @simplified_test_function
 def test_NocaseList_eq(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
     # pylint: disable=unused-argument
@@ -1755,7 +1842,7 @@ def test_NocaseList_eq(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
 
 @pytest.mark.parametrize(
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
-    TESTCASES_NOCASELIST_COMPARE)
+    TESTCASES_NOCASELIST_COMPARE + TESTCASES_NOCASELIST_EQUAL)  # type: ignore
 @simplified_test_function
 def test_NocaseList_ne(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
     # pylint: disable=unused-argument
@@ -1782,7 +1869,7 @@ def test_NocaseList_ne(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
 
 @pytest.mark.parametrize(
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
-    TESTCASES_NOCASELIST_COMPARE)
+    TESTCASES_NOCASELIST_COMPARE + TESTCASES_NOCASELIST_ORDER)  # type: ignore
 @simplified_test_function
 def test_NocaseList_gt(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
     # pylint: disable=unused-argument
@@ -1805,7 +1892,7 @@ def test_NocaseList_gt(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
 
 @pytest.mark.parametrize(
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
-    TESTCASES_NOCASELIST_COMPARE)
+    TESTCASES_NOCASELIST_COMPARE + TESTCASES_NOCASELIST_ORDER)  # type: ignore
 @simplified_test_function
 def test_NocaseList_lt(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
     # pylint: disable=unused-argument
@@ -1828,7 +1915,7 @@ def test_NocaseList_lt(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
 
 @pytest.mark.parametrize(
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
-    TESTCASES_NOCASELIST_COMPARE)
+    TESTCASES_NOCASELIST_COMPARE + TESTCASES_NOCASELIST_ORDER)  # type: ignore
 @simplified_test_function
 def test_NocaseList_ge(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
     # pylint: disable=unused-argument
@@ -1853,7 +1940,7 @@ def test_NocaseList_ge(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
 
 @pytest.mark.parametrize(
     "desc, kwargs, exp_exc_types, exp_warn_types, condition",
-    TESTCASES_NOCASELIST_COMPARE)
+    TESTCASES_NOCASELIST_COMPARE + TESTCASES_NOCASELIST_ORDER)  # type: ignore
 @simplified_test_function
 def test_NocaseList_le(testcase, obj1, obj2, exp_eq, exp_gt, exp_lt):
     # pylint: disable=unused-argument
@@ -1997,14 +2084,14 @@ TESTCASES_NOCASELIST_COPY = [
         dict(
             nclist=NocaseList(),
         ),
-        None if LIST_HAS_COPY else AttributeError, None, True
+        None, None, True
     ),
     (
         "List with two items",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
         ),
-        None if LIST_HAS_COPY else AttributeError, None, True
+        None, None, True
     ),
 ]
 
@@ -2048,14 +2135,14 @@ TESTCASES_NOCASELIST_CLEAR = [
         dict(
             nclist=NocaseList(),
         ),
-        None if LIST_HAS_CLEAR else AttributeError, None, True
+        None, None, True
     ),
     (
         "List with two items",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
         ),
-        None if LIST_HAS_CLEAR else AttributeError, None, True
+        None, None, True
     ),
 ]
 
