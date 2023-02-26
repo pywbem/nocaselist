@@ -10,6 +10,7 @@ import re
 import unicodedata
 import pickle
 import pytest
+import six
 
 from ..utils.simplified_test_function import simplified_test_function
 
@@ -41,6 +42,17 @@ NocaseList = list if TEST_AGAINST_LIST else _NocaseList
 DICT_PRESERVES_ORDER = sys.version_info[0:2] >= (3, 7)
 
 
+def ensure_unicode(value):
+    """
+    Return the value as a unicode string.
+    """
+    if value is None:
+        return None
+    if isinstance(value, six.text_type):
+        return value
+    return value.decode('utf-8')
+
+
 def assert_equal(list1, list2, verify_order=True):
     """
     Assert that list1 is equal to list2.
@@ -56,7 +68,8 @@ def assert_equal(list1, list2, verify_order=True):
     if verify_order:
         assert list1_lst == list2_lst
     else:
-        assert sorted(list1_lst) == sorted(list2_lst)
+        assert sorted(list1_lst, key=ensure_unicode) == \
+            sorted(list2_lst, key=ensure_unicode)
 
     # Check consistency of list1 between its internal casefolded list and
     # its external list
@@ -139,9 +152,9 @@ TESTCASES_NOCASELIST_INIT = [
     (
         "List from list as positional arg",
         dict(
-            init_args=(['Dog', 'Cat'],),
+            init_args=(['Dog', b'Cat'],),
             init_kwargs={},
-            exp_list=['Dog', 'Cat'],
+            exp_list=['Dog', b'Cat'],
             verify_order=True,
         ),
         None, None, True
@@ -149,9 +162,9 @@ TESTCASES_NOCASELIST_INIT = [
     (
         "List from tuple as positional arg",
         dict(
-            init_args=(('Dog', 'Cat'),),
+            init_args=(('Dog', b'Cat'),),
             init_kwargs={},
-            exp_list=['Dog', 'Cat'],
+            exp_list=['Dog', b'Cat'],
             verify_order=True,
         ),
         None, None, True
@@ -159,9 +172,9 @@ TESTCASES_NOCASELIST_INIT = [
     (
         "List from dict as positional arg (uses only the keys)",
         dict(
-            init_args=({'Dog': 'Kitten', 'Cat': 'Budgie'},),
+            init_args=({'Dog': 'Kitten', b'Cat': 'Budgie'},),
             init_kwargs={},
-            exp_list=['Dog', 'Cat'],
+            exp_list=['Dog', b'Cat'],
             verify_order=DICT_PRESERVES_ORDER,
         ),
         None, None, True
@@ -324,10 +337,19 @@ TESTCASES_NOCASELIST_GETITEM = [
         TypeError, None, True
     ),
     (
-        "Empty list, with string as index (invalid type)",
+        "Empty list, with unicode string as index (invalid type)",
         dict(
             nclist=NocaseList(),
             index='',
+            exp_value=None,
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Empty list, with byte string as index (invalid type)",
+        dict(
+            nclist=NocaseList(),
+            index=b'',
             exp_value=None,
         ),
         TypeError, None, True
@@ -346,7 +368,7 @@ TESTCASES_NOCASELIST_GETITEM = [
     (
         "List with two items, with None as index (invalid type)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             index=None,
             exp_value=None,
         ),
@@ -355,7 +377,7 @@ TESTCASES_NOCASELIST_GETITEM = [
     (
         "List with two items, with string as index (invalid type)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             index='',
             exp_value=None,
         ),
@@ -364,7 +386,7 @@ TESTCASES_NOCASELIST_GETITEM = [
     (
         "List with two items, with non-existing index 2 (out of range)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             index=2,
             exp_value=None,
         ),
@@ -373,7 +395,7 @@ TESTCASES_NOCASELIST_GETITEM = [
     (
         "List with two items, with index 0",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             index=0,
             exp_value='Dog',
         ),
@@ -382,18 +404,18 @@ TESTCASES_NOCASELIST_GETITEM = [
     (
         "List with two items, with index 1",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             index=1,
-            exp_value='Cat',
+            exp_value=b'Cat',
         ),
         None, None, True
     ),
     (
         "List with two items, with index -1",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             index=-1,
-            exp_value='Cat',
+            exp_value=b'Cat',
         ),
         None, None, True
     ),
@@ -446,10 +468,20 @@ TESTCASES_NOCASELIST_SETITEM = [
         TypeError, None, True
     ),
     (
-        "Empty list, with string as index (invalid type)",
+        "Empty list, with unicode string as index (invalid type)",
         dict(
             nclist=NocaseList(),
             index='',
+            value=None,
+            exp_nclist=None,
+        ),
+        TypeError, None, True
+    ),
+    (
+        "Empty list, with byte string as index (invalid type)",
+        dict(
+            nclist=NocaseList(),
+            index=b'',
             value=None,
             exp_nclist=None,
         ),
@@ -470,7 +502,7 @@ TESTCASES_NOCASELIST_SETITEM = [
     (
         "List with two items, with None as index (invalid type)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             index=None,
             value='Kitten',
             exp_nclist=None,
@@ -478,7 +510,7 @@ TESTCASES_NOCASELIST_SETITEM = [
         TypeError, None, True
     ),
     (
-        "List with two items, with index 0",
+        "List with two items, setting unicode string at index 0",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             index=0,
@@ -488,17 +520,17 @@ TESTCASES_NOCASELIST_SETITEM = [
         None, None, True
     ),
     (
-        "List with two items, with index 1",
+        "List with two items, setting byte string at index 1",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             index=1,
-            value='Newbie',
-            exp_nclist=NocaseList(['Dog', 'Newbie']),
+            value=b'Newbie',
+            exp_nclist=NocaseList(['Dog', b'Newbie']),
         ),
         None, None, True
     ),
     (
-        "List with two items, with index -1",
+        "List with two items, setting string at index -1",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             index=-1,
@@ -508,7 +540,7 @@ TESTCASES_NOCASELIST_SETITEM = [
         None, None, True
     ),
     (
-        "List with two items, with non-existing index 2 (out of range)",
+        "List with two items, setting string at index 2 (out of range)",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             index=2,
@@ -753,7 +785,7 @@ TESTCASES_NOCASELIST_CONTAINS = [
         None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
-        "Empty list, with non-existing empty value (not found)",
+        "Empty list, with non-existing empty unicode string value (not found)",
         dict(
             nclist=NocaseList(),
             value='',
@@ -762,10 +794,30 @@ TESTCASES_NOCASELIST_CONTAINS = [
         None, None, True
     ),
     (
-        "Empty list, with non-existing non-empty value (not found)",
+        "Empty list, with non-existing empty byte string value (not found)",
+        dict(
+            nclist=NocaseList(),
+            value=b'',
+            exp_result=False,
+        ),
+        None, None, True
+    ),
+    (
+        "Empty list, with non-existing non-empty unicode string value "
+        "(not found)",
         dict(
             nclist=NocaseList(),
             value='Dog',
+            exp_result=False,
+        ),
+        None, None, True
+    ),
+    (
+        "Empty list, with non-existing non-empty byte string value "
+        "(not found)",
+        dict(
+            nclist=NocaseList(),
+            value=b'Dog',
             exp_result=False,
         ),
         None, None, True
@@ -775,7 +827,7 @@ TESTCASES_NOCASELIST_CONTAINS = [
     (
         "List with two items, with None as value (no casefold method)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             value=None,
             exp_result=False,
         ),
@@ -784,41 +836,75 @@ TESTCASES_NOCASELIST_CONTAINS = [
     (
         "List with two items, with integer value 0 (no casefold method)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             value=0,
             exp_result=False if TEST_AGAINST_LIST else None,
         ),
         None if TEST_AGAINST_LIST else AttributeError, None, True
     ),
     (
-        "List with two items, with non-existing empty value (not found)",
+        "List with two items, with non-existing empty unicode string value "
+        "(not found)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
             value='',
             exp_result=False,
         ),
         None, None, True
     ),
     (
-        "List with two items, with non-existing non-empty value (not found)",
+        "List with two items, with non-existing empty byte string value "
+        "(not found)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
+            value=b'',
+            exp_result=False,
+        ),
+        None, None, True
+    ),
+    (
+        "List with two items, with non-existing non-empty unicode string value "
+        "(not found)",
+        dict(
+            nclist=NocaseList(['Dog', b'Cat']),
             value='invalid',
             exp_result=False,
         ),
         None, None, True
     ),
     (
-        "List with two items, with existing value in original case",
+        "List with two items, with non-existing non-empty byte string value "
+        "(not found)",
         dict(
-            nclist=NocaseList(['Dog', 'Cat']),
+            nclist=NocaseList(['Dog', b'Cat']),
+            value=b'invalid',
+            exp_result=False,
+        ),
+        None, None, True
+    ),
+    (
+        "List with two items, with existing unicode string value in original "
+        "case",
+        dict(
+            nclist=NocaseList(['Dog', b'Cat']),
             value='Dog',
             exp_result=True,
         ),
         None, None, True
     ),
     (
-        "List with two items, with existing value in non-original upper case",
+        "List with two items, with existing byte string value in original "
+        "case",
+        dict(
+            nclist=NocaseList([b'Dog', 'Cat']),
+            value=b'Dog',
+            exp_result=True,
+        ),
+        None, None, True
+    ),
+    (
+        "List with two items, with existing unicode string value in "
+        "non-original upper case",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value='DOG',
@@ -827,7 +913,18 @@ TESTCASES_NOCASELIST_CONTAINS = [
         None, None, True
     ),
     (
-        "List with two items, with existing value in non-original lower case",
+        "List with two items, with existing byte string value in "
+        "non-original upper case",
+        dict(
+            nclist=NocaseList([b'Dog', 'Cat']),
+            value=b'DOG',
+            exp_result=not TEST_AGAINST_LIST,
+        ),
+        None, None, True
+    ),
+    (
+        "List with two items, with existing unicode string value in "
+        "non-original lower case",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value='dog',
@@ -836,10 +933,31 @@ TESTCASES_NOCASELIST_CONTAINS = [
         None, None, True
     ),
     (
-        "List with two items, with existing value in non-original mixed case",
+        "List with two items, with existing byte string value in "
+        "non-original lower case",
+        dict(
+            nclist=NocaseList([b'Dog', 'Cat']),
+            value=b'dog',
+            exp_result=not TEST_AGAINST_LIST,
+        ),
+        None, None, True
+    ),
+    (
+        "List with two items, with existing unicode string value in "
+        "non-original mixed case",
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value='doG',
+            exp_result=not TEST_AGAINST_LIST,
+        ),
+        None, None, True
+    ),
+    (
+        "List with two items, with existing byte string value in "
+        "non-original mixed case",
+        dict(
+            nclist=NocaseList([b'Dog', 'Cat']),
+            value=b'doG',
             exp_result=not TEST_AGAINST_LIST,
         ),
         None, None, True

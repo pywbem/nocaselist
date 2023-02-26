@@ -36,7 +36,12 @@ for being case-insensitive, of course). This includes the ``clear()`` and
 
 The case-insensitivity is achieved by matching any key values as their
 casefolded values. By default, the casefolding is performed with
-:meth:`py:str.casefold` on Python 3 and with :meth:`py2:str.lower` on Python 2.
+:meth:`py:str.casefold` for unicode string keys and with :meth:`py:bytes.lower`
+for byte string keys.
+
+The :meth:`py:str.casefold` method implements the casefolding
+algorithm described in :term:`Default Case Folding in The Unicode Standard`.
+
 The default casefolding can be overridden with a user-defined casefold method.
 
 
