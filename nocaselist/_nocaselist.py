@@ -428,12 +428,8 @@ class NocaseList(list):
         """
         Remove all items from the list (and return None).
         """
-        try:
-            super(NocaseList, self).clear()
-            self._casefolded_list.clear()
-        except AttributeError:
-            del self[:]
-            del self._casefolded_list[:]
+        super(NocaseList, self).clear()
+        self._casefolded_list.clear()
 
     def index(self, value, start=0, stop=9223372036854775807):
         """
