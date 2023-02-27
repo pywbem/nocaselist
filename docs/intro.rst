@@ -29,8 +29,7 @@ Example:
 
 The :class:`~nocaselist.NocaseList` class supports the functionality of the
 built-in `list class of Python 3.8`_ on all Python versions it supports (except
-for being case-insensitive, of course). This includes the ``clear()`` and
-``copy()`` methods added in Python 3.3 to the built-in ``list`` class.
+for being case-insensitive, of course).
 
 .. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
 
