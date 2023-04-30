@@ -22,6 +22,8 @@ Released: not yet
 
 * Docs: Fixed description of default casefold method for Python 2.
 
+* Fixed coveralls issues with KeyError and HTTP 422 Unprocessable Entity.
+
 **Enhancements:**
 
 **Cleanup:**
