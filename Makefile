@@ -329,7 +329,10 @@ pip_upgrade_$(pymn).done: Makefile
 	@echo "Makefile: Installing/upgrading Pip (with PACKAGE_LEVEL=$(PACKAGE_LEVEL))"
 	-$(call RM_FUNC,$@)
 	bash -c 'pv=$$($(PIP_CMD) --version); if [[ $$pv =~ (^pip [1-8]\..*) ]]; then $(PYTHON_CMD) -m pip $(pip_opts) install pip==9.0.1; fi'
-	$(PYTHON_CMD) -m pip $(pip_opts) install $(pip_level_opts) pip
+ifeq ($(PACKAGE_LEVEL),minimum)
+	grep pip minimum-constraints.txt
+endif
+	$(PYTHON_CMD) -m pip $(pip_opts) -vv install $(pip_level_opts) pip
 	echo "done" >$@
 	@echo "Makefile: Done installing/upgrading Pip"
 
