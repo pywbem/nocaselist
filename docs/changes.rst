@@ -5,17 +5,15 @@ Change log
 ==========
 
 
-nocaselist 2.0.0.dev1
----------------------
+nocaselist 2.0.0
+----------------
 
-Released: not yet
+Released: 2023-06-01
 
 **Incompatible changes:**
 
 * Removed support for Python 2.7, 3.4, 3.5. The minimum required Python version
   is now 3.6. This was needed in order to add Python type hints.
-
-**Deprecations:**
 
 **Bug fixes:**
 
@@ -40,13 +38,6 @@ Released: not yet
 
 * Added type hints and type checking with MyPy (issue #96).
 
-**Cleanup:**
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 1.1.0
