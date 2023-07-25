@@ -112,6 +112,10 @@ entrypoints==0.3.0
 twine==1.8.1
 readme-renderer==23.0
 
+# Mypy (no imports, invoked via mypy script)
+mypy==0.971; python_version == '3.6'
+mypy==1.2.0; python_version >= '3.7'
+
 
 # Indirect dependencies with special constraints:
 
