@@ -88,10 +88,6 @@ dill>=0.3.6; python_version >= '3.7'
 # platformdirs is used by pylint starting with its 2.10
 platformdirs>=2.2.0
 
-# Mypy (no imports, invoked via mypy script)
-# Mypy 0.981 removed support for py36
-mypy>=0.971
-
 # Flake8 and dependents (no imports, invoked via flake8 script):
 # flake8 4.0.0 fixes an AttributeError on Python 3.10.
 # flake8 5.0.4 requires importlib-metadata>=1.1.0,<4.3 on py<3.8
@@ -105,6 +101,11 @@ entrypoints>=0.3.0
 twine>=1.8.1
 # readme-renderer 23.0 has made cmarkgfm part of extras (it fails on Cygwin)
 readme-renderer>=23.0
+
+# Mypy (no imports, invoked via mypy script)
+# Mypy 0.981 removed support for py36
+mypy>=0.971; python_version == '3.6'
+mypy>=1.2.0; python_version >= '3.7'
 
 
 # Indirect dependencies with special constraints:
