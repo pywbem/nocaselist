@@ -52,13 +52,16 @@ tox>=3.21.0
 Sphinx>=4.2.0
 docutils>=0.16,<0.17
 sphinx-git>=10.1.1
-GitPython>=2.1.1
+# GitPython 3.1.30 fixes safety issues 52322,52518
+GitPython>=2.1.1; python_version == '3.6'
+GitPython>=3.1.30; python_version >= '3.7'
 sphinxcontrib-fulltoc>=1.2.0
 sphinxcontrib-websupport>=1.1.2
 Pygments>=2.7.4
 sphinx-rtd-theme>=1.0.0
 # Babel 2.7.0 fixes an ImportError for MutableMapping which starts failing on Python 3.10
-Babel>=2.7.0
+# Babel 2.9.1 fixes safety issue 42203
+Babel>=2.9.1
 
 # PyLint (no imports, invoked via pylint script)
 # Pylint requires astroid
@@ -109,9 +112,6 @@ mypy>=1.2.0; python_version >= '3.7'
 
 
 # Indirect dependencies with special constraints:
-
-# safety 2.3.5 started pinning packaging to <22.0 and requires >=21.0
-packaging>=21.0,<22.0
 
 # pytz (used by TBD)
 pytz>=2019.1
