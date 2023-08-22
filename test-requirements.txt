@@ -29,7 +29,8 @@ six>=1.14.0
 # Indirect dependencies with special constraints:
 
 # packaging (used by pytest)
-packaging>=17.0
+# safety 2.3.5 started pinning packaging to <22.0 and requires >=21.0
+packaging>=21.0,<22.0
 
 # pluggy (used by pytest, tox)
 # Pluggy 0.12.0 has a bug causing pytest plugins to fail loading on py38
