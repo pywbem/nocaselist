@@ -142,7 +142,7 @@ appdirs==1.4.4
 args==0.1.0
 attrs==19.2.0
 bleach==3.3.0
-certifi==2022.12.07
+certifi==2023.07.22
 chardet==3.0.3
 contextlib2==0.6.0
 distlib==0.3.1
