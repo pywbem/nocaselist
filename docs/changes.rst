@@ -16,6 +16,8 @@ Released: not yet
 
 **Bug fixes:**
 
+* Fixed safety issues from 2023-08-27.
+
 **Enhancements:**
 
 * Improvements for safety check tool: Made passing the safety check mandatory;
