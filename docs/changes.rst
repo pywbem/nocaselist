@@ -12,11 +12,18 @@ Released: not yet
 
 **Incompatible changes:**
 
+* Installation of this package using "setup.py" is no longer supported.
+  Use "pip" instead.
+
 **Deprecations:**
 
 **Bug fixes:**
 
 * Fixed safety issues from 2023-08-27.
+
+* Test: Removed setup.py based installs from "make installtest", since one
+  of them started installing a pre-release of a package on an unsupported Python
+  version. The recommendation has been for a while now to no longer use
 
 **Enhancements:**
 
