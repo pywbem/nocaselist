@@ -122,6 +122,9 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Debug - fail if on macos
+      if: "matrix.os == 'macos-latest'"
+      run: exit 1
     - name: Display initial Python packages
       run: |
         echo "Installed Python packages:"
@@ -209,9 +212,17 @@ jobs:
 
   test_finish:
     needs: test
+    if: "!cancelled()"
+    # Note: By default, failures of dependent jobs cause this job to be
+    # cancelled which counts as a success. The above condition causes this job
+    # to run regardless of dependent jobs status, except if the workflow was
+    # cancelled.
     runs-on: ubuntu-latest
     container: python:3-slim
     steps:
+    - name: Fail if any test job has failed
+      if: failure()
+      run: exit 1
     - name: Install coveralls
       run: |
         pip3 install --upgrade coveralls
