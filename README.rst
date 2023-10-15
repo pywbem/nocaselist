@@ -1,17 +1,17 @@
 nocaselist - A case-insensitive list for Python
 ===============================================
 
-.. image:: https://badge.fury.io/py/nocaselist.svg
+.. image:: https://img.shields.io/pypi/v/nocaselist.svg
     :target: https://pypi.python.org/pypi/nocaselist/
     :alt: Version on Pypi
 
-.. image:: https://github.com/pywbem/nocaselist/workflows/test/badge.svg?branch=master
-    :target: https://github.com/pywbem/nocaselist/actions/
-    :alt: Actions status
+.. image:: https://github.com/pywbem/nocaselist/actions/workflows/test.yml/badge.svg?branch=master
+    :target: https://github.com/pywbem/nocaselist/actions/workflows/test.yml?query=branch%3Amaster
+    :alt: Test status (master)
 
 .. image:: https://readthedocs.org/projects/nocaselist/badge/?version=latest
     :target: https://readthedocs.org/projects/nocaselist/builds/
-    :alt: Docs build status (master)
+    :alt: Docs status (master)
 
 .. image:: https://coveralls.io/repos/github/pywbem/nocaselist/badge.svg?branch=master
     :target: https://coveralls.io/github/pywbem/nocaselist?branch=master
