@@ -122,6 +122,9 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Debug - fail if on macos
+      if: "matrix.os == 'macos-latest'"
+      run: exit 1
     - name: Display initial Python packages
       run: |
         echo "Installed Python packages:"
@@ -206,12 +209,39 @@ jobs:
         PACKAGE_LEVEL: ${{ matrix.package_level }}
       run: |
         make safety
+    - name: Debug - Print job.status
+      if: "!cancelled()"
+      run: echo "${{ job.status }}"
+    - name: Write test job status
+      if: "!cancelled()"
+      uses: cloudposse/github-action-matrix-outputs-write@main
+      id: write_status
+      with:
+        matrix-step-name: ${{ github.job }}
+        matrix-key: "${{ matrix.os }},${{ matrix.python-version }},${{ matrix.package_level }}"
+        outputs: |-
+          status: "${{ job.status }}"
 
   test_finish:
     needs: test
+    if: "!cancelled()"
+    # Note: By default, failures of dependent jobs cause this job to be
+    # cancelled which counts as a success. The above condition causes this job
+    # to run regardless of dependent jobs status, except if the workflow was
+    # cancelled.
     runs-on: ubuntu-latest
-    container: python:3-slim
+    container: python:3
     steps:
+    - name: Read test job status
+      id: read_status
+      uses: cloudposse/github-action-matrix-outputs-read@main
+      with:
+        matrix-step-name: write_status
+    - name: Debug - Print steps.read_status.outputs
+      run: echo "${{ steps.read_status.outputs }}"
+    - name: Fail if any test job failed
+      if: "contains('failure', steps.read_status.outputs.status)"
+      run: exit 1
     - name: Install coveralls
       run: |
         pip3 install --upgrade coveralls
