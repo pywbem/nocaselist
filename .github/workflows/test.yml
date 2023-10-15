@@ -206,12 +206,27 @@ jobs:
         PACKAGE_LEVEL: ${{ matrix.package_level }}
       run: |
         make safety
+    - name: Mark job result
+      id: test_result
+      env:
+        PACKAGE_LEVEL: ${{ matrix.package_level }}
+      run: exit 0
 
   test_finish:
     needs: test
+    if: "!cancelled()"
+    # Note: By default, failures of dependent jobs cause this job to be
+    # cancelled which counts as a success. The above condition causes this job
+    # to run regardless of dependent jobs status, except if the workflow was
+    # cancelled.
     runs-on: ubuntu-latest
     container: python:3-slim
     steps:
+    - name: Debug - print steps.test_result.outcome
+      run: echo "${{ steps.test_result.outcome }}"
+    - name: Fail if any test job has failed
+      if: "steps.test_result.outcome != 'success'"
+      run: exit 1
     - name: Install coveralls
       run: |
         pip3 install --upgrade coveralls

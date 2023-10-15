@@ -25,6 +25,8 @@ Released: not yet
   of them started installing a pre-release of a package on an unsupported Python
   version. The recommendation has been for a while now to no longer use
 
+* Test: Added support in test workflow for safely enabling automerge.
+
 **Enhancements:**
 
 * Improvements for safety check tool: Made passing the safety check mandatory;
