@@ -19,7 +19,7 @@ Released: not yet
 
 **Bug fixes:**
 
-* Fixed safety issues from 2023-08-27 and 2023-10-15.
+* Fixed safety issues up to 2023-11-12.
 
 * Test: Removed setup.py based installs from "make installtest", since one
   of them started installing a pre-release of a package on an unsupported Python
