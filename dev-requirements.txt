@@ -23,7 +23,6 @@ pytest-cov>=2.7.0
 coveralls>=3.3.0
 
 # Safety CI by pyup.io
-# safety 2.2.0 resolves safety issue #51358
 safety>=2.2.0
 # safety 2.2.0 requires dparse>=0.6.2
 dparse>=0.6.2
@@ -52,7 +51,6 @@ tox>=3.21.0
 Sphinx>=4.2.0
 docutils>=0.16,<0.17
 sphinx-git>=10.1.1
-# GitPython 3.1.30 fixes safety issues 52322,52518
 GitPython>=2.1.1; python_version == '3.6'
 GitPython>=3.1.37; python_version >= '3.7'
 sphinxcontrib-fulltoc>=1.2.0
@@ -60,7 +58,6 @@ sphinxcontrib-websupport>=1.1.2
 Pygments>=2.7.4
 sphinx-rtd-theme>=1.0.0
 # Babel 2.7.0 fixes an ImportError for MutableMapping which starts failing on Python 3.10
-# Babel 2.9.1 fixes safety issue 42203
 Babel>=2.9.1
 
 # PyLint (no imports, invoked via pylint script)
