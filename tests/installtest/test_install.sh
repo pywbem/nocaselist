@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (C) 2020 Andreas Maier
 #
 # Test the installation of the package.
 #

@@ -1,3 +1,4 @@
+# Copyright (C) 2020 Andreas Maier
 """
 import_installed - Utility function for testing the installed version of the
 package.

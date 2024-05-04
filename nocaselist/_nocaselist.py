@@ -1,3 +1,4 @@
+# Copyright (C) 2020 Andreas Maier
 """
 This module provides class NocaseList.
 """
