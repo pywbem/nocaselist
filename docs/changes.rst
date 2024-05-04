@@ -20,6 +20,9 @@ Released: not yet
 
 * Removed unneeded backslashes reported by new Pylint version.
 
+* Test: Fixed issues resulting from removal of support for pytest.warns(None)
+  in pytest version 8.
+
 
 nocaselist 1.1.2
 ----------------
