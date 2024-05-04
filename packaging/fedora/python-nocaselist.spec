@@ -45,7 +45,7 @@ BuildRequires:  python%{python3_pkgversion}-six
 
 %files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE
-%doc README.rst
+%doc README.md
 %{python3_sitelib}/%{srcname}*.egg-info/
 %{python3_sitelib}/%{srcname}/
 

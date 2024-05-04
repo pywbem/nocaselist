@@ -171,7 +171,7 @@ setuptools.setup(
         'test': test,
     },
     description="A case-insensitive list for Python",
-    long_description=read_file('README.rst'),
+    long_description=read_file('README.md'),
     long_description_content_type='text/x-rst',
     license="Apache Software License 2.0",
     author="Andreas Maier",
