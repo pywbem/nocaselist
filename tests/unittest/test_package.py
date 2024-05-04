@@ -1,3 +1,4 @@
+# Copyright (C) 2020 Andreas Maier
 """
 Test import and versioning of the package.
 """

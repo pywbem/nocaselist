@@ -1,3 +1,4 @@
+# Copyright (C) 2020 Andreas Maier
 """
 simplified_test_function - Pytest extension for simplifying test functions.
 """

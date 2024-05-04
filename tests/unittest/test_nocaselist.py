@@ -1,3 +1,4 @@
+# Copyright (C) 2020 Andreas Maier
 """
 Test the NocaseList class.
 """

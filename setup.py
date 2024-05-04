@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Copyright (C) 2020 Andreas Maier
 """
 Python setup script for the nocaselist project.
 """
