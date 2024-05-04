@@ -13,7 +13,7 @@ is a case-insensitive list that preserves the lexical case of its items.
 
 Example:
 
-```bash
+``` bash
 $ python
 >>> from nocaselist import NocaseList
 
@@ -46,7 +46,7 @@ user-defined casefold method.
 To install the latest released version of the nocaselist package into
 your active Python environment:
 
-```bash
+``` bash
 $ pip install nocaselist
 ```
 
