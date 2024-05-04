@@ -5,17 +5,15 @@ Change log
 ==========
 
 
-nocaselist 2.0.1.dev1
----------------------
+nocaselist 2.0.1
+----------------
 
-Released: not yet
+Released: 2024-05-04
 
 **Incompatible changes:**
 
 * Installation of this package using "setup.py" is no longer supported.
   Use "pip" instead.
-
-**Deprecations:**
 
 **Bug fixes:**
 
@@ -48,14 +46,6 @@ Released: not yet
   file from the git commit history. Added the invocation of 'make authors' to
   the description of how to release a version in the development
   documentation.
-
-**Cleanup:**
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 2.0.0
