@@ -44,6 +44,11 @@ Released: not yet
   fails due to new issues introduced by other packages, in order to surface
   our own issues in the test runs in any case.
 
+* Added support for a new make target 'authors' that generates an AUTHORS.md
+  file from the git commit history. Added the invocation of 'make authors' to
+  the description of how to release a version in the development
+  documentation.
+
 **Cleanup:**
 
 **Known issues:**
