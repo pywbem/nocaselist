@@ -271,9 +271,7 @@ Further rules:
 * The following long-lived branches exist and should be used as targets for
   pull requests:
 
-  - ``master`` - for next functional version
-
-  - ``stable_$MN`` - for fix stream of released version M.N.
+  - ``master`` - for everything (fixes, new functions)
 
 * We use topic branches for everything!
 
@@ -285,8 +283,7 @@ Further rules:
 
 * We use pull requests to review the branches.
 
-  - Use the correct long-lived branch (e.g. ``master`` or ``stable_0.2``) as a
-    merge target.
+  - Use the long-lived branch ``master`` as a merge target.
 
   - Review happens as comments on the pull requests.
 
@@ -305,8 +302,7 @@ It covers all variants of versions that can be released:
 
 * Releasing a new major version (Mnew.0.0) based on the master branch
 * Releasing a new minor version (M.Nnew.0) based on the master branch
-* Releasing a new update version (M.N.Unew) based on the stable branch of its
-  minor version
+* Releasing a new update version (M.N.Unew) based on the master branch
 
 The description assumes that the `pywbem/nocaselist`
 Github repo is cloned locally and its upstream repo is assumed to have the Git
@@ -342,14 +338,14 @@ Git repo.
         MN=0.9
         BRANCH=master
 
-    When releasing a new update version (e.g. ``0.8.1``) based on the stable
-    branch of its minor version:
+    When releasing a new update version (e.g. ``0.8.1``) based on the master
+    branch:
 
     .. code-block:: sh
 
         MNU=0.8.1
         MN=0.8
-        BRANCH=stable_${MN}
+        BRANCH=master
 
 2.  Create a topic branch for the version that is being released:
 
@@ -406,9 +402,8 @@ Git repo.
 7.  On GitHub, create a Pull Request for branch ``release_M.N.U``. This will
     trigger the CI runs.
 
-    Important: When creating Pull Requests, GitHub by default targets the
-    ``master`` branch. When releasing based on a stable branch, you need to
-    change the target branch of the Pull Request to ``stable_M.N``.
+    When creating Pull Requests, GitHub by default targets the ``master``
+    branch.
 
 8.  On GitHub, close milestone ``M.N.U``.
 
@@ -427,35 +422,12 @@ Git repo.
         git push -f --tags
         git branch -d release_${MNU}
 
-11. When releasing based on the master branch, create and push a new stable
-    branch for the same minor version:
-
-    .. code-block:: sh
-
-        git checkout -b stable_${MN}
-        git push --set-upstream origin stable_${MN}
-        git checkout ${BRANCH}
-
-    Note that no GitHub Pull Request is created for any ``stable_*`` branch.
-
-12. When releasing based on the master branch, activate the new version
-    ``stable_M.N`` on ReadTheDocs:
-
-    * Go to https://readthedocs.org/projects/nocaselist/versions/
-      and log in.
-
-    * Activate the new version ``stable_M.N``.
-
-      This triggers a build of that version. Verify that the build succeeds
-      and that new version is shown in the version selection popup at
-      https://nocaselist.readthedocs.io/
-
-13. On GitHub, edit the new tag ``M.N.U``, and create a release description on
+12. On GitHub, edit the new tag ``M.N.U``, and create a release description on
     it. This will cause it to appear in the Release tab.
 
     You can see the tags in GitHub via Code -> Releases -> Tags.
 
-14. Upload the package to PyPI:
+133. Upload the package to PyPI:
 
     .. code-block:: sh
 
@@ -480,8 +452,7 @@ This section covers all variants of new versions:
 
 * Starting a new major version (Mnew.0.0) based on the master branch
 * Starting a new minor version (M.Nnew.0) based on the master branch
-* Starting a new update version (M.N.Unew) based on the stable branch of its
-  minor version
+* Starting a new update version (M.N.Unew) based on the master branch
 
 The description assumes that the `pywbem/nocaselist`
 Github repo is cloned locally and its upstream repo is assumed to have the Git
@@ -517,14 +488,14 @@ Git repo.
         MN=0.9
         BRANCH=master
 
-    When starting a new minor version (e.g. ``0.8.1``) based on the stable
-    branch of its minor version:
+    When starting a new minor version (e.g. ``0.8.1``) based on the master
+    branch:
 
     .. code-block:: sh
 
         MNU=0.8.1
         MN=0.8
-        BRANCH=stable_${MN}
+        BRANCH=master
 
 2.  Create a topic branch for the version that is being started:
 
@@ -588,9 +559,8 @@ Git repo.
 
 6.  On GitHub, create a Pull Request for branch ``start_M.N.U``.
 
-    Important: When creating Pull Requests, GitHub by default targets the
-    ``master`` branch. When starting a version based on a stable branch, you
-    need to change the target branch of the Pull Request to ``stable_M.N``.
+    When creating Pull Requests, GitHub by default targets the ``master``
+    branch.
 
 7.  On GitHub, create a milestone for the new version ``M.N.U``.
 
