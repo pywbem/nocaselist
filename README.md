@@ -11,20 +11,19 @@ Class
 [NocaseList](https://nocaselist.readthedocs.io/en/stable/reference.html#nocaselist.NocaseList)
 is a case-insensitive list that preserves the lexical case of its items.
 
-Example:
+Example::
 
-``` bash
-$ python
->>> from nocaselist import NocaseList
 
->>> list1 = NocaseList(['Alpha', 'Beta'])
+    $ python
+    >>> from nocaselist import NocaseList
 
->>> print(list1)  # Any access is case-preserving
-['Alpha', 'Beta']
+    >>> list1 = NocaseList(['Alpha', 'Beta'])
 
->>> 'ALPHA' in list1  # Any lookup or comparison is case-insensitive
-True
-```
+    >>> print(list1)  # Any access is case-preserving
+    ['Alpha', 'Beta']
+
+    >>> 'ALPHA' in list1  # Any lookup or comparison is case-insensitive
+    True
 
 The
 [NocaseList](https://nocaselist.readthedocs.io/en/stable/reference.html#nocaselist.NocaseList)
@@ -44,11 +43,9 @@ user-defined casefold method.
 # Installation
 
 To install the latest released version of the nocaselist package into
-your active Python environment:
+your active Python environment::
 
-``` bash
-$ pip install nocaselist
-```
+    $ pip install nocaselist
 
 The nocaselist package has no prerequisite Python packages.
 
