@@ -16,6 +16,9 @@ Released: not yet
 
 **Bug fixes:**
 
+* Fixed incorrect formatting of package description on Pypi by setting the
+  correct content type in setup.py. (issue #157)
+
 **Enhancements:**
 
 * Test: Added a step to the test workflow for displaying the tree of all
