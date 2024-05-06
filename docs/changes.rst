@@ -20,6 +20,9 @@ Released: not yet
 
 **Cleanup:**
 
+* Converted any use of percent-style formatting strings and most use of
+  'format()' to f-strings. (issue #154)
+
 **Known issues:**
 
 * See `list of open issues`_.
