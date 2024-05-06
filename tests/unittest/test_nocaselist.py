@@ -433,7 +433,7 @@ def test_NocaseList_getitem(testcase, nclist, index, exp_value):
     # are not mistaken as expected exceptions
     assert testcase.exp_exc_types is None
 
-    assert act_value == exp_value, "Unexpected value at index {}".format(index)
+    assert act_value == exp_value, f"Unexpected value at index {index}"
 
 
 TESTCASES_NOCASELIST_SETITEM = [
@@ -588,7 +588,7 @@ def test_NocaseList_setitem(testcase, nclist, index, value, exp_nclist):
 
     act_value = nclist[index]  # Uses NocaseList.__getitem__()
 
-    assert act_value == value, "Unexpected value at index {}".format(index)
+    assert act_value == value, f"Unexpected value at index {index}"
 
     assert_equal(nclist, exp_nclist)  # Uses NocaseList.__iter__()
 
@@ -1014,8 +1014,7 @@ def test_NocaseList_contains(testcase, nclist, value, exp_result):
     # are not mistaken as expected exceptions
     assert testcase.exp_exc_types is None
 
-    assert act_result == exp_result, \
-        "Unexpected result for value {!r}".format(value)
+    assert act_result == exp_result, f"Unexpected result for value {value!r}"
 
 
 TESTCASES_NOCASELIST_SIZEOF = [
