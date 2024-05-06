@@ -124,6 +124,9 @@ readme-renderer==23.0
 mypy==0.971; python_version == '3.6'
 mypy==1.2.0; python_version >= '3.7'
 
+# Package dependency management tools
+pipdeptree==2.2.0
+
 
 # Indirect dependencies with special constraints:
 

@@ -18,6 +18,9 @@ Released: not yet
 
 **Enhancements:**
 
+* Test: Added a step to the test workflow for displaying the tree of all
+  package dependencies using pipdeptree. (issue #153)
+
 **Cleanup:**
 
 * Converted any use of percent-style formatting strings and most use of
