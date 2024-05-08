@@ -16,6 +16,8 @@ Released: not yet
 
 **Bug fixes:**
 
+* Docs: Fixed missing Python 3.12 in Trove classifiers.
+
 **Enhancements:**
 
 **Cleanup:**
