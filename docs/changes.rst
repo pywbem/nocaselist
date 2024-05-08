@@ -21,6 +21,8 @@ Released: not yet
 
 **Enhancements:**
 
+* Test: Added support for testing on Python 3.12. (issue #159)
+
 * Test: Added a step to the test workflow for displaying the tree of all
   package dependencies using pipdeptree. (issue #153)
 
