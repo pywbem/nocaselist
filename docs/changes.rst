@@ -18,6 +18,8 @@ Released: not yet
 
 * Dev: Fixed safety issues up to 2024-07-09.
 
+* Test: Fixed new issues from pylint 3.2.
+
 * Docs: Fixed missing Python 3.12 in Trove classifiers.
 
 **Enhancements:**
