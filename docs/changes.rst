@@ -16,7 +16,7 @@ Released: not yet
 
 **Bug fixes:**
 
-* Dev: Fixed safety issues up to 2024-07-09.
+* Dev: Fixed safety issues up to 2024-07-21.
 
 * Test: Fixed new issues from pylint 3.2.
 
