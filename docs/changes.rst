@@ -5,14 +5,10 @@ Change log
 ==========
 
 
-nocaselist 2.0.3.dev1
----------------------
+nocaselist 2.0.3
+----------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2024-08-18
 
 **Bug fixes:**
 
@@ -22,18 +18,10 @@ Released: not yet
 
 * Docs: Fixed missing Python 3.12 in Trove classifiers.
 
-**Enhancements:**
-
 **Cleanup:**
 
 * Test: Increased vrsions of GitHub Actions plugins used, to eliminate warnings
   about node v16.
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 2.0.2
