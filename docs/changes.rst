@@ -5,7 +5,7 @@ Change log
 ==========
 
 
-nocaselist 2.1.0.dev1
+nocaselist 2.0.3.dev1
 ---------------------
 
 Released: not yet
