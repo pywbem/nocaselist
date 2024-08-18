@@ -6,10 +6,7 @@ This module provides class NocaseList.
 import sys
 import os
 from typing import Callable, AnyStr, Optional, Union
-try:
-    from typing import SupportsIndex  # type: ignore
-except ImportError:
-    from typing_extensions import SupportsIndex  # Python <=3.7
+from typing import SupportsIndex  # type: ignore
 try:
     from typing import TypeAlias  # type: ignore
 except ImportError:
@@ -89,7 +86,7 @@ class NocaseList(list):
         """
         Initialize the list with the items in the specified iterable.
         """
-        super(NocaseList, self).__init__(iterable)
+        super().__init__(iterable)
 
         # The _casefolded_list attribute is a list with the same items as the
         # original (inherited) list, except they are casefolded using the
@@ -186,7 +183,7 @@ class NocaseList(list):
         Raises:
           AttributeError: The value does not have the casefold method.
         """
-        super(NocaseList, self).__setitem__(index, value)  # type: ignore
+        super().__setitem__(index, value)  # type: ignore
         self._casefolded_list[index] = self._casefolded_value(value)  # type: ignore # noqa: E501 pylint: disable=line-too-long
 
     def __delitem__(self, index: IndexOrSlice) -> None:
@@ -195,7 +192,7 @@ class NocaseList(list):
 
         Invoked using ``del ncl[index]``.
         """
-        super(NocaseList, self).__delitem__(index)
+        super().__delitem__(index)
         del self._casefolded_list[index]
 
     def __contains__(self, value: Value) -> bool:
@@ -227,8 +224,8 @@ class NocaseList(list):
         """
         if not isinstance(other, (list, tuple)):
             raise TypeError(
-                "Can only concatenate list or tuple (not {t}) to NocaseList".
-                format(t=type(other)))
+                f"Can only concatenate list or tuple (not {type(other)}) to "
+                "NocaseList")
         lst = self.copy()
         lst.extend(other)
         return lst
@@ -265,8 +262,8 @@ class NocaseList(list):
         # any exception, so we still need to check the type:
         if not isinstance(number, int):
             raise TypeError(
-                "Cannot multiply NocaseList by non-integer of type {t}".
-                format(t=type(number)))
+                "Cannot multiply NocaseList by non-integer of type "
+                f"{type(number)}")
         lst = NocaseList()
         for _ in range(0, number):
             lst.extend(self)
@@ -301,8 +298,8 @@ class NocaseList(list):
         # any exception, so we still need to check the type:
         if not isinstance(number, int):
             raise TypeError(
-                "Cannot multiply NocaseList by non-integer of type {t}".
-                format(t=type(number)))
+                "Cannot multiply NocaseList by non-integer of type "
+                f"{type(number)}")
         if number <= 0:
             del self[:]
             del self._casefolded_list[:]
@@ -472,7 +469,7 @@ class NocaseList(list):
         """
         Remove all items from the list (and return None).
         """
-        super(NocaseList, self).clear()
+        super().clear()
         self._casefolded_list.clear()
 
     def index(self, value: Value, start: SupportsIndex = 0,
@@ -500,7 +497,7 @@ class NocaseList(list):
         Raises:
           AttributeError: The value does not have the casefold method.
         """
-        super(NocaseList, self).append(value)
+        super().append(value)
         self._casefolded_list.append(self._casefolded_value(value))
 
     def extend(self, values: Iterable) -> None:
@@ -512,7 +509,7 @@ class NocaseList(list):
           AttributeError: A value in the iterable does not have the casefold
             method.
         """
-        super(NocaseList, self).extend(values)
+        super().extend(values)
         # The following is a circumvention for a behavior of the 'pickle' module
         # that during unpickling may call this method on an object that has
         # been created with __new__() without calling __init__().
@@ -530,7 +527,7 @@ class NocaseList(list):
         Raises:
           AttributeError: The value does not have the casefold method.
         """
-        super(NocaseList, self).insert(index, value)
+        super().insert(index, value)
         self._casefolded_list.insert(index, self._casefolded_value(value))
 
     def pop(self, index: SupportsIndex = -1) -> Value:
@@ -539,7 +536,7 @@ class NocaseList(list):
         from the list.
         """
         self._casefolded_list.pop(index)
-        return super(NocaseList, self).pop(index)
+        return super().pop(index)
 
     def remove(self, value: Value) -> None:
         """
@@ -551,13 +548,13 @@ class NocaseList(list):
           AttributeError: The value does not have the casefold method.
         """
         self._casefolded_list.remove(self._casefolded_value(value))
-        super(NocaseList, self).remove(value)
+        super().remove(value)
 
     def reverse(self) -> None:
         """
         Reverse the items in the list in place (and return None).
         """
-        super(NocaseList, self).reverse()
+        super().reverse()
         self._casefolded_list = self._new_casefolded_list(self)
 
     def sort(self, *, key: Optional[Callable] = None,
@@ -585,5 +582,5 @@ class NocaseList(list):
                 return key(self._casefolded_value(value))
             return self._casefolded_value(value)
 
-        super(NocaseList, self).sort(key=casefolded_key, reverse=reverse)
+        super().sort(key=casefolded_key, reverse=reverse)
         self._casefolded_list = self._new_casefolded_list(self)

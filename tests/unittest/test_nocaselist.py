@@ -3,7 +3,6 @@
 Test the NocaseList class.
 """
 
-from __future__ import absolute_import
 
 import sys
 import os
@@ -11,7 +10,6 @@ import re
 import unicodedata
 import pickle
 import pytest
-import six  # type: ignore
 
 from ..utils.simplified_test_function import simplified_test_function
 
@@ -43,7 +41,7 @@ def ensure_unicode(value):
     """
     if value is None:
         return None
-    if isinstance(value, six.text_type):
+    if isinstance(value, str):
         return value
     return value.decode('utf-8')
 
