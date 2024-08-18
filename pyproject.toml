@@ -1,0 +1,69 @@
+# pyproject.toml file for nocaselist
+# Documentation:
+# pyproject.toml: https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+# setuptools items: https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+
+[build-system]
+requires = [
+    # Keep in sync with base-requirements.txt and the base dependencies in
+    # minimum-constraints-install.txt
+    "setuptools>=70.0.0",
+    "setuptools-scm[toml]>=8.1.0",
+    "wheel>=0.38.1"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+platforms = ["any"]
+script-files = []
+zip-safe = true
+
+[tool.setuptools.packages.find]
+# setuptools needs all sub-packages to be specified as well to avoid the
+# ambiguity warning. That can be done by specifyng 'packages' with a full list
+# of packages including sub-packages, or by specifying 'packages.find' with
+# wildcards. The strings in 'packages.find' are matched using glob pattern
+# matching against the package path.
+include = ["nocaselist"]
+
+[project]
+name = "nocaselist"
+description = "A case-insensitive list for Python"
+authors = [
+    {name = "Andreas Maier", email = "maiera@de.ibm.com"}
+]
+maintainers = [
+    {name = "Andreas Maier", email = "maiera@de.ibm.com"},
+]
+readme = "README.md"
+license = {text = "Apache License, Version 2.0"}
+keywords = ["list", "case-insensitive"]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: Apache Software License',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+]
+requires-python = ">=3.8"
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/pywbem/nocaselist"
+"Bug Tracker" = "https://github.com/pywbem/nocaselist/issues"
+Documentation = "https://nocaselist.readthedocs.io/en/latest/"
+"Source Code" = "https://github.com/pywbem/nocaselist"
+Changelog = "https://nocaselist.readthedocs.io/en/latest/changes.html"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools_scm]
+# Get the version from the Git tag, and write a version file:
+version_file = "nocaselist/_version_scm.py"
