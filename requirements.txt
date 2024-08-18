@@ -15,11 +15,8 @@
 
 # Direct dependencies (except pip, setuptools, wheel):
 
-# On Python 3.6, pip 21.3.1 is the newest version and it fails recognizing
-#   that typing-extensions 4.2.0 started requiring Python>=3.7
 # The typing-extensions features used by nocaselist are in standard Python on Python>=3.10
-typing-extensions>=3.10,<4.2.0; python_version == '3.6'
-typing-extensions>=3.10; python_version >= '3.7' and python_version <= '3.9'
+typing-extensions>=3.10; python_version >= '3.8' and python_version <= '3.9'
 
 
 # Indirect dependencies are not specified in this file.

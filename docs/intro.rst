@@ -54,8 +54,8 @@ is implemented in its :meth:`~nocaselist.NocaseList.__casefold__` method. That
 method returns the casefolded value for the case-insensitive list items.
 
 The default implementation of the :meth:`~nocaselist.NocaseList.__casefold__`
-method calls :meth:`py:str.casefold` on Python 3 and :meth:`py2:str.lower` on
-Python 2. The :meth:`py:str.casefold` method implements the casefolding
+method calls :meth:`py:str.casefold`.
+The :meth:`py:str.casefold` method implements the casefolding
 algorithm described in :term:`Default Case Folding in The Unicode Standard`.
 
 If it is necessary to change the case-insensitive behavior of the
@@ -98,7 +98,7 @@ is regularly tested in GitHub Actions on the following operating systems:
 
 The package is supported and tested on the following Python versions:
 
-* Python: 3.6 and all higher 3.x versions
+* Python: 3.8 and higher
 
 
 .. _`Installing`:

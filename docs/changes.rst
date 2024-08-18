@@ -12,6 +12,9 @@ Released: not yet
 
 **Incompatible changes:**
 
+* Dropped support for Python 3.6 and 3.7 because they are out of service and
+  to simplify development dependencies. (issue #178)
+
 **Deprecations:**
 
 **Bug fixes:**
