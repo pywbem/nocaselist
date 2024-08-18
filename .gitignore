@@ -16,6 +16,7 @@
 /done/*.done
 /packaging/*/*.tar.gz
 /packaging/*/*.done
+/nocaselist/_version_scm.py
 *.pyc
 *.pyo
 *.log
