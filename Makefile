@@ -222,7 +222,7 @@ mypy_opts := --follow-imports skip
 # Flake8 config file
 flake8_rc_file := .flake8
 
-# Safety policy file (for packages needed for installation)
+# Safety policy files
 safety_install_policy_file := .safety-policy-install.yml
 safety_develop_policy_file := .safety-policy-develop.yml
 
@@ -340,6 +340,9 @@ platform:
 	@echo "Package $(package_name) installation: $(shell $(PIP_CMD) $(pip_opts) show $(package_name) | grep Location)"
 	@echo "Makefile: $@ done."
 
+.PHONY: _always
+_always:
+
 .PHONY: pip_list
 pip_list:
 	@echo "Makefile: Installed Python packages:"
@@ -352,18 +355,6 @@ env:
 	$(ENV)
 	@echo "Makefile: $@ done."
 
-.PHONY: _check_version
-_check_version:
-ifeq (,$(package_version))
-	$(error Package version could not be determined)
-endif
-
-.PHONY: _check_installed
-_check_installed:
-	@echo "Makefile: Verifying installation of package $(package_name)"
-	$(PYTHON_CMD) -c "import $(package_name)"
-	@echo "Makefile: Done verifying installation of package $(package_name)"
-
 .PHONY: install
 install: $(done_dir)/install_$(pymn)_$(PACKAGE_LEVEL).done
 	@echo "Makefile: $@ done."
@@ -373,11 +364,11 @@ develop: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done
 	@echo "Makefile: $@ done."
 
 .PHONY: build
-build: _check_version $(bdist_file) $(sdist_file)
+build: $(dist_files)
 	@echo "Makefile: $@ done."
 
 .PHONY: builddoc
-builddoc: html
+builddoc: $(doc_build_dir)/html/docs/index.html
 	@echo "Makefile: $@ done."
 
 .PHONY: check
@@ -426,7 +417,7 @@ clean:
 	@echo "Makefile: $@ done."
 
 .PHONY: upload
-upload: _check_version $(dist_files)
+upload: $(dist_files)
 	@echo "Makefile: Checking files before uploading to PyPI"
 	twine check $(dist_files)
 	@echo "Makefile: Uploading to PyPI: $(package_name) $(package_version)"
@@ -456,11 +447,7 @@ $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done: $(done_dir)/base_$(pymn)_$(PA
 	@echo "Makefile: Done installing development requirements"
 	echo "done" >$@
 
-.PHONY: html
-html: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done $(doc_build_dir)/html/docs/index.html
-	@echo "Makefile: $@ done."
-
-$(doc_build_dir)/html/docs/index.html: Makefile $(doc_dependent_files)
+$(doc_build_dir)/html/docs/index.html: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done Makefile $(doc_dependent_files)
 	-$(call RM_FUNC,$@)
 	@echo "Makefile: Creating the documentation as HTML pages"
 	$(doc_cmd) -b html $(doc_opts) $(doc_build_dir)/html
@@ -506,16 +493,19 @@ doccoverage: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done
 	@echo "Makefile: $@ done."
 
 .PHONY: authors
-authors: _check_version
-	echo "# Authors of this project" >AUTHORS.md
-	echo "" >>AUTHORS.md
-	echo "Sorted list of authors derived from git commit history:" >>AUTHORS.md
-	echo '```' >>AUTHORS.md
-	git shortlog --summary --email | cut -f 2 | sort >>AUTHORS.md
-	echo '```' >>AUTHORS.md
+authors: AUTHORS.md
 	@echo "Makefile: $@ done."
 
-# Distribution archives.
+# Make sure the AUTHORS.md file is up to date but has the old date when it did not change to prevent redoing dependent targets
+AUTHORS.md: _always
+	echo "# Authors of this project" >AUTHORS.md.tmp
+	echo "" >>AUTHORS.md.tmp
+	echo "Sorted list of authors derived from git commit history:" >>AUTHORS.md.tmp
+	echo '```' >>AUTHORS.md.tmp
+	git shortlog --summary --email | cut -f 2 | sort >>AUTHORS.md.tmp
+	echo '```' >>AUTHORS.md.tmp
+	sh -c "if ! diff -q AUTHORS.md.tmp AUTHORS.md; then mv AUTHORS.md.tmp AUTHORS.md; else rm AUTHORS.md.tmp; fi"
+
 $(sdist_file): pyproject.toml $(dist_dependent_files)
 	@echo "Makefile: Building the source distribution archive: $(sdist_file)"
 	$(PYTHON_CMD) -m build --sdist --outdir $(dist_dir) .
@@ -525,6 +515,14 @@ $(bdist_file) $(version_file): pyproject.toml $(dist_dependent_files)
 	@echo "Makefile: Building the wheel distribution archive: $(bdist_file)"
 	$(PYTHON_CMD) -m build --wheel --outdir $(dist_dir) -C--universal .
 	@echo "Makefile: Done building the wheel distribution archive: $(bdist_file)"
+
+$(done_dir)/flake8_$(pymn)_$(PACKAGE_LEVEL).done: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done Makefile $(flake8_rc_file) $(check_py_files)
+	-$(call RM_FUNC,$@)
+	@echo "Makefile: Running Flake8"
+	flake8 --version
+	flake8 --statistics --config=$(flake8_rc_file) --filename='*' $(check_py_files)
+	@echo "Makefile: Done running Flake8"
+	echo "done" >$@
 
 $(done_dir)/pylint_$(pymn)_$(PACKAGE_LEVEL).done: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done Makefile $(pylint_rc_file) $(check_py_files)
 	-$(call RM_FUNC,$@)
@@ -540,14 +538,6 @@ $(done_dir)/mypy_$(pymn)_$(PACKAGE_LEVEL).done: $(done_dir)/develop_$(pymn)_$(PA
 	mypy --version
 	mypy $(mypy_opts) $(check_mypy_py_files)
 	@echo "Makefile: Done running Mypy"
-	echo "done" >$@
-
-$(done_dir)/flake8_$(pymn)_$(PACKAGE_LEVEL).done: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done Makefile $(flake8_rc_file) $(check_py_files)
-	-$(call RM_FUNC,$@)
-	@echo "Makefile: Running Flake8"
-	flake8 --version
-	flake8 --statistics --config=$(flake8_rc_file) --filename='*' $(check_py_files)
-	@echo "Makefile: Done running Flake8"
 	echo "done" >$@
 
 $(done_dir)/safety_develop_$(pymn)_$(PACKAGE_LEVEL).done: $(done_dir)/develop_$(pymn)_$(PACKAGE_LEVEL).done $(safety_develop_policy_file) minimum-constraints-develop.txt minimum-constraints-install.txt

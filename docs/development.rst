@@ -121,7 +121,7 @@ There are the following types of tests:
    Test execution can be modified by a number of environment variables, as
    documented in the make help (execute `make help`).
 
-1. Installation tests
+2. Installation tests
 
    These tests can be run standalone, and the tests validate their results
    automatically.
