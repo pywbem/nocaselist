@@ -57,9 +57,9 @@ dynamic = ["version", "dependencies", "optional-dependencies"]
 [project.urls]
 Homepage = "https://github.com/pywbem/nocaselist"
 "Bug Tracker" = "https://github.com/pywbem/nocaselist/issues"
-Documentation = "https://nocaselist.readthedocs.io/en/latest/"
+Documentation = "https://nocaselist.readthedocs.io/en/master/"
 "Source Code" = "https://github.com/pywbem/nocaselist"
-Changelog = "https://nocaselist.readthedocs.io/en/latest/changes.html"
+Changelog = "https://nocaselist.readthedocs.io/en/master/changes.html"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}

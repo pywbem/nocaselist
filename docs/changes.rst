@@ -41,6 +41,10 @@ Released: not yet
 
 * Dev: Cleanup in the Makefile. (related to issue #152)
 
+* Docs: Changed versions shown for the documentation to be master and the
+  latest fix version of each minor version. Changed documentation links in
+  README file to reference the master version.
+
 **Known issues:**
 
 * See `list of open issues`_.
