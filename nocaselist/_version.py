@@ -3,24 +3,17 @@
 Version of the nocaselist package.
 """
 
+# In the RTD docs build, _version_scm.py does not exist:
 try:
     from ._version_scm import version, version_tuple
 except ImportError:
-    from importlib.metadata import version as get_version
-    version = get_version("nocaselist")
-    v_list = []
-    for item in version.split('.'):
-        try:
-            v_item = int(item)
-        except ValueError:
-            v_item = item
-            v_list.append(v_item)
-    version_tuple = tuple(v_list)
+    version = "unknown"
+    version_tuple = tuple("unknown")
 
 __all__ = ['__version__', '__version_tuple__']
 
 #: The full version of this package including any development levels, as a
-#: :term:`string`.
+#: string.
 #:
 #: Possible formats for this version string are:
 #:
