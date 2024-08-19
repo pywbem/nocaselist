@@ -2,13 +2,13 @@
 
 [![Version on Pypi](https://img.shields.io/pypi/v/nocaselist.svg)](https://pypi.python.org/pypi/nocaselist/)
 [![Test status (master)](https://github.com/pywbem/nocaselist/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/pywbem/nocaselist/actions/workflows/test.yml?query=branch%3Amaster)
-[![Docs status (master)](https://readthedocs.org/projects/nocaselist/badge/?version=latest)](https://readthedocs.org/projects/nocaselist/builds/)
+[![Docs status (master)](https://readthedocs.org/projects/nocaselist/badge/?version=master)](https://readthedocs.org/projects/nocaselist/builds/)
 [![Test coverage (master)](https://coveralls.io/repos/github/pywbem/nocaselist/badge.svg?branch=master)](https://coveralls.io/github/pywbem/nocaselist?branch=master)
 
 # Overview
 
 Class
-[NocaseList](https://nocaselist.readthedocs.io/en/stable/reference.html#nocaselist.NocaseList)
+[NocaseList](https://nocaselist.readthedocs.io/en/master/reference.html#nocaselist.NocaseList)
 is a case-insensitive list that preserves the lexical case of its items.
 
 Example:
@@ -25,7 +25,7 @@ Example:
     True
 
 The
-[NocaseList](https://nocaselist.readthedocs.io/en/stable/reference.html#nocaselist.NocaseList)
+[NocaseList](https://nocaselist.readthedocs.io/en/master/reference.html#nocaselist.NocaseList)
 class supports the functionality of the built-in
 [list class of Python 3.8](https://docs.python.org/3.8/library/stdtypes.html#list)
 on all Python versions it supports (except for being case-insensitive, of
@@ -49,20 +49,20 @@ your active Python environment:
 The nocaselist package has no prerequisite Python packages.
 
 For more details and alternative ways to install, see
-[Installation](https://nocaselist.readthedocs.io/en/stable/intro.html#installation).
+[Installation](https://nocaselist.readthedocs.io/en/master/intro.html#installation).
 
 # Documentation
 
-- [Documentation](https://nocaselist.readthedocs.io/en/stable/)
+- [Documentation](https://nocaselist.readthedocs.io/en/master/)
 
 # Change History
 
-- [Change history](https://nocaselist.readthedocs.io/en/stable/changes.html)
+- [Change history](https://nocaselist.readthedocs.io/en/master/changes.html)
 
 # Contributing
 
 For information on how to contribute to the nocaselist project, see
-[Contributing](https://nocaselist.readthedocs.io/en/stable/development.html#contributing).
+[Contributing](https://nocaselist.readthedocs.io/en/master/development.html#contributing).
 
 # License
 
