@@ -31,6 +31,8 @@ Released: not yet
   with Python 3.9-3.11, by running it without login shell. Added Python 3.11 on
   MacOS to the normal tests.
 
+* Fixed new issues of Pylint 3.3.
+
 **Enhancements:**
 
 * Added '__version_tuple__' with the integer versions. (related to issue #152)
