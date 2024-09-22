@@ -464,6 +464,10 @@ ignored-parents=
 # Maximum number of arguments for function / method.
 max-args=8
 
+# Maximum number of positional arguments for function / method.
+# Added in pylint 3.3.0
+max-positional-arguments=8
+
 # Maximum number of attributes for a class (see R0902).
 # TODO AM: Are these just variables, without methods? class & instance? including private? including inherited?
 max-attributes=15
