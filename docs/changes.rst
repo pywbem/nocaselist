@@ -35,6 +35,9 @@ Released: not yet
 
 **Enhancements:**
 
+* Added support for Python 3.13. This required increasing the minimum version
+  of several packages needed for development. (issue #203)
+
 * Added '__version_tuple__' with the integer versions. (related to issue #152)
 
 * Dev: Changed from setup.py to using pyproject.toml. (issue #152)
