@@ -45,7 +45,7 @@ pytest==7.0.0
 
 # virtualenv
 virtualenv==20.2.1; python_version <= '3.7'
-virtualenv==20.23.0; python_version >= '3.8'
+virtualenv==20.26.6; python_version >= '3.8'
 
 # six (used by virtualenv, tox, probably others)
 six==1.14.0; python_version <= '3.11'
@@ -137,7 +137,7 @@ dill==0.3.4; python_version == '3.6'
 dill==0.3.6; python_version >= '3.7' and python_version <= '3.11'
 dill==0.3.7; python_version >= '3.12'
 platformdirs==2.2.0; python_version == '3.6'
-platformdirs==3.2.0; python_version >= '3.7'
+platformdirs==3.9.1; python_version >= '3.7'
 
 # Flake8 and dependents (no imports, invoked via flake8 script):
 flake8==3.9.0; python_version <= '3.7'
@@ -193,7 +193,7 @@ contextlib2==0.6.0
 distlib==0.3.7
 docopt==0.6.1
 filelock==3.2.0; python_version == '3.6'
-filelock==3.11.0; python_version >= "3.7"
+filelock==3.12.2; python_version >= "3.7"
 gitdb==4.0.1
 # idna>3 requires using requests >=2.26.0
 idna==3.7
