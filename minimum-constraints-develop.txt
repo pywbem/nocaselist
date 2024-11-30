@@ -10,14 +10,13 @@
 
 # PEP517 package builder, used in Makefile
 build==1.0.0
-virtualenv==20.25.0
+virtualenv==20.26.6
 pyproject-hooks==1.1.0
 
 # Unit test (e.g. imports into testcases):
 pytest==7.0.0
 
 # Install test:
-virtualenv==20.25.0
 six==1.16.0
 
 # Coverage reporting (no imports, invoked via coveralls script):
