@@ -24,6 +24,9 @@ Released: not yet
 
 * Fixed new issues of Pylint 3.3.
 
+* Test: Adjusted OS versions in GitHub Actions test workflow because macos-12
+  is no longer supported, and ubuntu-latest changed to ubuntu-24.04.
+
 **Enhancements:**
 
 **Cleanup:**
