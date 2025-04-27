@@ -5,14 +5,10 @@ Change log
 ==========
 
 
-nocaselist 2.0.4.dev1
----------------------
+nocaselist 2.0.4
+----------------
 
-Released: not yet
-
-**Incompatible changes:**
-
-**Deprecations:**
+Released: 2025-04-27
 
 **Bug fixes:**
 
@@ -28,16 +24,6 @@ Released: not yet
 
 * Test: Adjusted OS versions in GitHub Actions test workflow because macos-12
   is no longer supported, and ubuntu-latest changed to ubuntu-24.04.
-
-**Enhancements:**
-
-**Cleanup:**
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 2.0.3
