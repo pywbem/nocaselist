@@ -5,10 +5,10 @@ Change log
 ==========
 
 
-nocaselist 2.1.0.dev1
----------------------
+nocaselist 2.1.0
+----------------
 
-Released: not yet
+Released: 2024-04-27
 
 **Incompatible changes:**
 
@@ -22,8 +22,6 @@ Released: not yet
 * Dev: Removed support for the env.var TEST_INSTALLED that used the installed
   package for testing, for simplicity. Now, the local package in the repository
   main directory is always used for testing.
-
-**Deprecations:**
 
 **Bug fixes:**
 
@@ -59,12 +57,6 @@ Released: not yet
 * Docs: Changed versions shown for the documentation to be master and the
   latest fix version of each minor version. Changed documentation links in
   README file to reference the master version.
-
-**Known issues:**
-
-* See `list of open issues`_.
-
-.. _`list of open issues`: https://github.com/pywbem/nocaselist/issues
 
 
 nocaselist 2.0.3
