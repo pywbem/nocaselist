@@ -34,6 +34,8 @@ typer-cli>=0.12.1
 typer-slim>=0.12.1
 # safety 3.4.0 depends on psutil~=6.1.0
 psutil~=6.1.0
+# safety 3.4.0 requires filelock~=3.16.1
+filelock~=3.16.1
 
 # PyYAML is pulled in by dparse
 # PyYAML is also pulled in by dparse and python-coveralls
