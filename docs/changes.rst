@@ -5,6 +5,12 @@ Change log
 ==========
 
 
+nocaselist 1.1.3-dev1
+---------------------
+
+Released: not yet
+
+
 nocaselist 1.1.2
 ----------------
 
