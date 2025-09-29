@@ -10,6 +10,10 @@ nocaselist 1.1.3-dev1
 
 Released: not yet
 
+**Bug fixes:**
+
+* Changed tested OS and Python versions to latest support in GitHub Actions.
+
 
 nocaselist 1.1.2
 ----------------

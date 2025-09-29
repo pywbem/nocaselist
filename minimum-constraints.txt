@@ -121,7 +121,8 @@ virtualenv==20.1.0; python_version >= '3.5'
 # Packaging 21.0 is required by safety 2.2.0
 packaging==17.0; python_version == '2.7'
 packaging==17.0; python_version == '3.5'
-packaging==21.0; python_version >= '3.6'
+packaging==21.0; python_version == '3.6'
+packaging==22.0; python_version >= '3.7'
 
 # pluggy (used by pytest, tox)
 pluggy==0.13.1
