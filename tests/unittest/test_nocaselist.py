@@ -1074,7 +1074,7 @@ TESTCASES_NOCASELIST_ADD = [
         dict(
             nclist=NocaseList(),
             other=('Dog',),
-            exp_result=None if TEST_AGAINST_LIST \
+            exp_result=None if TEST_AGAINST_LIST
             else NocaseList(['Dog']),
         ),
         TypeError if TEST_AGAINST_LIST else None, None, True
@@ -2222,7 +2222,7 @@ TESTCASES_NOCASELIST_APPEND = [
         dict(
             nclist=NocaseList(),
             value=1234,
-            exp_nclist=NocaseList([1234]) if TEST_AGAINST_LIST \
+            exp_nclist=NocaseList([1234]) if TEST_AGAINST_LIST
             else NocaseList(),
         ),
         None if TEST_AGAINST_LIST else AttributeError, None, True
@@ -2243,7 +2243,7 @@ TESTCASES_NOCASELIST_APPEND = [
         dict(
             nclist=NocaseList(['Dog', 'Cat']),
             value=1234,
-            exp_nclist=NocaseList(['Dog', 'Cat', 1234]) if TEST_AGAINST_LIST \
+            exp_nclist=NocaseList(['Dog', 'Cat', 1234]) if TEST_AGAINST_LIST
             else NocaseList(['Dog', 'Cat']),
         ),
         None if TEST_AGAINST_LIST else AttributeError, None, True
@@ -2750,7 +2750,7 @@ TESTCASES_NOCASELIST_SORT = [
         dict(
             nclist=NocaseList(['Dog', 'cat']),
             kwargs={},
-            exp_nclist=['Dog', 'cat'] if TEST_AGAINST_LIST \
+            exp_nclist=['Dog', 'cat'] if TEST_AGAINST_LIST
             else NocaseList(['cat', 'Dog']),
         ),
         None, None, True
@@ -2763,7 +2763,7 @@ TESTCASES_NOCASELIST_SORT = [
             kwargs=dict(
                 reverse=True,
             ),
-            exp_nclist=['cat', 'Dog'] if TEST_AGAINST_LIST \
+            exp_nclist=['cat', 'Dog'] if TEST_AGAINST_LIST
             else NocaseList(['Dog', 'cat']),
         ),
         None, None, True
@@ -2775,7 +2775,7 @@ TESTCASES_NOCASELIST_SORT = [
             kwargs=dict(
                 key=lambda x: x[1],  # sort by second character
             ),
-            exp_nclist=['BUdgie', 'cat'] if TEST_AGAINST_LIST \
+            exp_nclist=['BUdgie', 'cat'] if TEST_AGAINST_LIST
             else NocaseList(['cat', 'BUdgie']),
         ),
         None, None, True
@@ -2789,7 +2789,7 @@ TESTCASES_NOCASELIST_SORT = [
                 key=lambda x: x[1],  # sort by second character
                 reverse=True,
             ),
-            exp_nclist=['cat', 'BUdgie'] if TEST_AGAINST_LIST \
+            exp_nclist=['cat', 'BUdgie'] if TEST_AGAINST_LIST
             else NocaseList(['BUdgie', 'cat']),
         ),
         None, None, True
