@@ -148,7 +148,8 @@ readme-renderer>=23.0; python_version >= '3.5'
 # safety 2.3.5 started pinning packaging to <22.0 and requires >=21.0
 packaging>=17.0; python_version == '2.7'
 packaging>=17.0; python_version == '3.5'
-packaging>=21.0,<22.0; python_version >= '3.6'
+packaging>=21.0,<22.0; python_version == '3.6'
+packaging>=22.0; python_version >= '3.7'
 
 # pytz (used by TBD)
 pytz>=2016.10; python_version <= '3.9'
