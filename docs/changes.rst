@@ -16,6 +16,8 @@ Released: not yet
 
 * Fixed issue with 'long' type when cythonizing the library on Python 3.
 
+* Fixed new issues with Pylint 3.3.
+
 
 nocaselist 1.1.2
 ----------------
