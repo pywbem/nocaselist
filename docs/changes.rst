@@ -18,6 +18,8 @@ Released: not yet
 
 * Fixed new issues with Pylint 3.3.
 
+* Removed unneeded backslashes reported by new Pylint version.
+
 
 nocaselist 1.1.2
 ----------------
