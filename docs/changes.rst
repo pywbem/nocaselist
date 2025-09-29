@@ -14,6 +14,8 @@ Released: not yet
 
 * Changed tested OS and Python versions to latest support in GitHub Actions.
 
+* Fixed issue with 'long' type when cythonizing the library on Python 3.
+
 
 nocaselist 1.1.2
 ----------------
