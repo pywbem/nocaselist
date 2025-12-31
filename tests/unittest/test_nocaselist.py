@@ -4,7 +4,6 @@ Test the NocaseList class.
 """
 
 
-import sys
 import os
 import re
 import unicodedata
@@ -30,9 +29,6 @@ if TEST_AGAINST_LIST:
 # The list class being tested
 # pylint: disable=invalid-name
 NocaseList = list if TEST_AGAINST_LIST else _NocaseList
-
-# Flag indicating that standard dict is guaranteed to preserve order
-DICT_PRESERVES_ORDER = sys.version_info[0:2] >= (3, 7)
 
 
 def ensure_unicode(value):
@@ -168,7 +164,7 @@ TESTCASES_NOCASELIST_INIT = [
             init_args=({'Dog': 'Kitten', b'Cat': 'Budgie'},),
             init_kwargs={},
             exp_list=['Dog', b'Cat'],
-            verify_order=DICT_PRESERVES_ORDER,
+            verify_order=True,
         ),
         None, None, True
     ),
