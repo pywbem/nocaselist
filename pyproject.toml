@@ -36,12 +36,13 @@ maintainers = [
     {name = "Andreas Maier", email = "maiera@de.ibm.com"},
 ]
 readme = "README.md"
-license = {text = "Apache License, Version 2.0"}
+# License info in new PEP 639 format (since setuptools 77.0.3)
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 keywords = ["list", "case-insensitive"]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
-    'License :: OSI Approved :: Apache Software License',
     'Operating System :: OS Independent',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.9',
