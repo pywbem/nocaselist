@@ -27,7 +27,7 @@ Example:
 The
 [NocaseList](https://nocaselist.readthedocs.io/en/master/reference.html#nocaselist.NocaseList)
 class supports the functionality of the built-in
-[list class of Python 3.8](https://docs.python.org/3.8/library/stdtypes.html#list)
+[list class of Python 3.14](https://docs.python.org/3.14/library/stdtypes.html#list)
 on all Python versions it supports (except for being case-insensitive, of
 course).
 
