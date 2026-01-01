@@ -28,10 +28,10 @@ Example:
     True
 
 The :class:`~nocaselist.NocaseList` class supports the functionality of the
-built-in `list class of Python 3.8`_ on all Python versions it supports (except
+built-in `list class of Python 3.14`_ on all Python versions it supports (except
 for being case-insensitive, of course).
 
-.. _list class of Python 3.8: https://docs.python.org/3.8/library/stdtypes.html#list
+.. _list class of Python 3.14: https://docs.python.org/3.14/library/stdtypes.html#list
 
 The case-insensitivity is achieved by matching any key values as their
 casefolded values. By default, the casefolding is performed with

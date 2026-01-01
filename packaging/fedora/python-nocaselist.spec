@@ -14,10 +14,8 @@ BuildArch:      noarch
 Python class 'NocaseList' is a case-insensitive list that preserves the
 lexical case of its items.
 
-It supports the functionality of the built-in 'list' class of Python 3.8 on
+It supports the functionality of the built-in 'list' class of Python 3.14 on
 all Python versions it supports (except for being case-insensitive, of course).
-This includes the 'clear()' and 'copy()' methods added in Python 3.3 to the
-built-in 'list' class.}
 
 %description %{_description}
 
