@@ -15,56 +15,6 @@ Change log
    .. include:: tmp_changes.rst
 
 .. towncrier start
-nocaselist 2.2.0
-----------------
-
-Released: 2026-01-04
-
-**Incompatible changes:**
-
-* Removed support for Python 3.8, because (1) Python 3.8 is out of service since
-  2024-10-07, and (2) the license definition according to PEP 639 requires
-  setuptools >= 77.0.3 which requires Python >= 3.9, and pyproject.toml does
-  not support environment markers. (`#235 <https://github.com/pywbem/nocaselist/issues/235>`_)
-
-**Bug fixes:**
-
-* Addressed safety issues up to 2026-01-04.
-
-* Dev: Fixed issue where the package version used for distribution archive file
-  names were generated inconsistently between setuptools_scm (used in Makefile)
-  and the 'build' module, by using no build isolation ('--no-isolation' option
-  of the 'build' module) and increasing the minimum version of 'setuptools-scm'
-  to 9.2.0, which fixes a number of version related issues.
-
-* Dev: Circumvented safety issue with import of typer module by pinning typer
-  to <0.17.0.
-
-* Dev: Made order of names in AUTHORS.md reliable.
-
-* Test: Fixed new issues raised by pylint 4.0.0.
-
-* Dev: Added dependencies for Sphinx.
-
-* Dev: Fixed error with running the safety tool by increasing minimum version
-  of nltk to 3.9.2.
-
-**Enhancements:**
-
-* Added support for Python 3.14.
-
-**Cleanup:**
-
-* Test: Added retries for sending coverage data to the coveralls.io site to
-  address issues with the site.
-
-* Used new license format defined in PEP 639 to accommodate upcoming removal
-  of support for old format. (`#235 <https://github.com/pywbem/nocaselist/issues/235>`_)
-
-* Verified that between Python 3.9 and 3.14, the built-in 'list' class did
-  not get new functionality. Updated the documentation accordingly. (`#242 <https://github.com/pywbem/nocaselist/issues/242>`_)
-
-
 nocaselist 2.1.0
 ----------------
 
