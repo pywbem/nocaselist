@@ -1,2 +1,0 @@
-Verified that between Python 3.9 and 3.14, the built-in 'list' class did
-not get new functionality. Updated the documentation accordingly.
