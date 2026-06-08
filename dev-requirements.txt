@@ -42,8 +42,8 @@ pydantic_core>=2.41.1
 typer>=0.16.0
 typer-cli>=0.16.0
 typer-slim>=0.16.0
-filelock==3.16.1; python_version == '3.9'
-filelock==3.24.2; python_version >= '3.10'
+filelock>=3.16.1; python_version == '3.9'
+filelock>=3.24.2; python_version >= '3.10'
 
 # PyYAML is pulled in by dparse
 # PyYAML is also pulled in by dparse and python-coveralls
