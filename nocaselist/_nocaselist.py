@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 from typing import Callable, AnyStr, Optional, Union
-from typing import SupportsIndex  # type: ignore
+from typing import SupportsIndex
 from typing_extensions import Self
 try:
     from typing import TypeAlias  # type: ignore
@@ -198,11 +198,11 @@ class NocaseList(list):
         """
         return self._casefolded_value(value) in self._casefolded_list
 
-    def __add__(self, other: OtherList) -> NocaseList:
+    def __add__(self, other: OtherList) -> Self:
         """
-        Return a new :class:`NocaseList` object that contains the items from
-        the left hand operand (``self``) and the items from the right hand
-        operand (``other``).
+        Return a new :class:`NocaseList` (or subclass) object that contains
+        the items from the left hand operand (``self``) and the items from the
+        right hand operand (``other``).
 
         The right hand operand (``other``) must be an instance of
         :class:`py:list` (including :class:`NocaseList`) or :class:`py:tuple`.
@@ -237,11 +237,11 @@ class NocaseList(list):
         self.extend(other)
         return self
 
-    def __mul__(self, number: int) -> NocaseList:  # type: ignore
+    def __mul__(self, number: int) -> Self:  # type: ignore
         """
-        Return a new :class:`NocaseList` object that contains the items from
-        the left hand operand (``self``) as many times as specified by the right
-        hand operand (``number``).
+        Return a new :class:`NocaseList` (or subclass) object that contains
+        the items from the left hand operand (``self``) as many times as
+        specified by the right hand operand (``number``).
 
         A number <= 0 causes the returned list to be empty.
 
@@ -255,16 +255,16 @@ class NocaseList(list):
             raise TypeError(
                 "Cannot multiply NocaseList by non-integer of type "
                 f"{type(number)}")
-        lst = NocaseList()
+        lst = type(self)()
         for _ in range(0, number):
             lst.extend(self)
         return lst
 
-    def __rmul__(self, number: int) -> NocaseList:  # type: ignore
+    def __rmul__(self, number: int) -> Self:  # type: ignore
         """
-        Return a new :class:`NocaseList` object that contains the items from
-        the right hand operand (``self``) as many times as specified by the left
-        hand operand (``number``).
+        Return a new :class:`NocaseList` (or subclass) object that contains the
+        items from the right hand operand (``self``) as many times as specified
+        by the left hand operand (``number``).
 
         A number <= 0 causes the returned list to be empty.
 
@@ -302,7 +302,7 @@ class NocaseList(list):
         # verified that this is necessary.
         return self
 
-    def __reversed__(self) -> NocaseList:  # type: ignore
+    def __reversed__(self) -> Self:  # type: ignore
         """
         Return a shallow copy of the list that has its items reversed in order.
 
@@ -450,11 +450,11 @@ class NocaseList(list):
         """
         return self._casefolded_list.count(self._casefolded_value(value))
 
-    def copy(self) -> NocaseList:
+    def copy(self) -> Self:
         """
         Return a shallow copy of the list.
         """
-        return NocaseList(self)
+        return type(self)(self)
 
     def clear(self) -> None:
         """
