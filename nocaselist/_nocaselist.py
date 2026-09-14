@@ -2,27 +2,18 @@
 """
 This module provides class NocaseList.
 """
+from __future__ import annotations
 
-import sys
-import os
+from collections.abc import Iterable
 from typing import Callable, AnyStr, Optional, Union
 from typing import SupportsIndex  # type: ignore
+from typing_extensions import Self
 try:
     from typing import TypeAlias  # type: ignore
 except ImportError:
     from typing_extensions import TypeAlias  # Python <=3.9
-if sys.version_info[0:2] >= (3, 9):
-    from collections.abc import Iterable  # type: ignore
-else:
-    # Before py39, collections.abc.Iterable did not support generic type
-    from typing import Iterable
 
 __all__ = ['NocaseList']
-
-# This env var is set when building the docs. It causes the methods
-# that are supposed to exist only in a particular Python version, not to be
-# removed, so they appear in the docs.
-BUILDING_DOCS = os.environ.get('BUILDING_DOCS', False)
 
 # Type for values in NocaseList
 Value: TypeAlias = Optional[AnyStr]
@@ -207,7 +198,7 @@ class NocaseList(list):
         """
         return self._casefolded_value(value) in self._casefolded_list
 
-    def __add__(self, other: OtherList) -> 'NocaseList':
+    def __add__(self, other: OtherList) -> NocaseList:
         """
         Return a new :class:`NocaseList` object that contains the items from
         the left hand operand (``self``) and the items from the right hand
@@ -230,7 +221,7 @@ class NocaseList(list):
         lst.extend(other)
         return lst
 
-    def __iadd__(self, other: OtherList) -> 'NocaseList':
+    def __iadd__(self, other: OtherList) -> Self:
         """
         Extend the left hand operand (``self``) by the items from the right
         hand operand (``other``).
@@ -246,7 +237,7 @@ class NocaseList(list):
         self.extend(other)
         return self
 
-    def __mul__(self, number: int) -> 'NocaseList':  # type: ignore
+    def __mul__(self, number: int) -> NocaseList:  # type: ignore
         """
         Return a new :class:`NocaseList` object that contains the items from
         the left hand operand (``self``) as many times as specified by the right
@@ -269,7 +260,7 @@ class NocaseList(list):
             lst.extend(self)
         return lst
 
-    def __rmul__(self, number: int) -> 'NocaseList':  # type: ignore
+    def __rmul__(self, number: int) -> NocaseList:  # type: ignore
         """
         Return a new :class:`NocaseList` object that contains the items from
         the right hand operand (``self``) as many times as specified by the left
@@ -284,7 +275,7 @@ class NocaseList(list):
         lst = self * number  # Delegates to __mul__()
         return lst
 
-    def __imul__(self, number: int) -> 'NocaseList':  # type: ignore
+    def __imul__(self, number: int) -> Self:  # type: ignore
         """
         Change the left hand operand (``self``) so that it contains the items
         from the original left hand operand (``self``) as many times as
@@ -311,7 +302,7 @@ class NocaseList(list):
         # verified that this is necessary.
         return self
 
-    def __reversed__(self) -> 'NocaseList':  # type: ignore
+    def __reversed__(self) -> NocaseList:  # type: ignore
         """
         Return a shallow copy of the list that has its items reversed in order.
 
@@ -459,7 +450,7 @@ class NocaseList(list):
         """
         return self._casefolded_list.count(self._casefolded_value(value))
 
-    def copy(self) -> 'NocaseList':
+    def copy(self) -> NocaseList:
         """
         Return a shallow copy of the list.
         """
@@ -557,7 +548,7 @@ class NocaseList(list):
         super().reverse()
         self._casefolded_list = self._new_casefolded_list(self)
 
-    def sort(self, *, key: Optional[Callable] = None,
+    def sort(self, *, key: Callable | None = None,
              reverse: bool = False) -> None:
         """
         Sort the items in the list in place (and return None).
