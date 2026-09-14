@@ -15,6 +15,38 @@ Change log
    .. include:: tmp_changes.rst
 
 .. towncrier start
+nocaselist 2.3.0
+----------------
+
+Released: 2026-09-14
+
+**Bug fixes:**
+
+* Fixed safety issues up to 2026-09-08.
+
+* Development: Tolerate premature deletion of local release/start branches.
+
+* Docs: Migrated from our own support for generating summary tables in the
+  documentation to using autodocsumm to fix an import error with Sphinx 9.
+
+**Enhancements:**
+
+* Development: Added a GitHub Actions workflow named 'backport' that creates a
+  backport PR to the latest stable branch stable_M.N when a PR labeled with the
+  'backport' label is merged.
+
+* Made the following :class:`nocaselist.NocaseList` methods subclass-safe,
+  that so far returned a NocaseList object. Now, they return an object of
+  NocaseList or a subclass, if NocaseList was subclassed:
+  ``__add__()``, ``__mul__()``, ``__rmul__()``, ``__reversed__()``, ``copy()``.
+
+* Added Ruff checker and fixed all issues it found. (`#306 <https://github.com/pywbem/nocaselist/issues/306>`_)
+
+**Cleanup:**
+
+* Development: Upgraded GitHub Actions plugins to versions that use node.js 24.
+
+
 nocaselist 2.2.0
 ----------------
 
